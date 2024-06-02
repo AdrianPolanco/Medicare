@@ -9,9 +9,11 @@ namespace Medicare.Infrastructure.Services
         public string HashPassword(string password)
         {
             //Generar una sal aleatoria para la contraseña
+            // 128/8 = 16 bytes, tendra un array de con 16 numeros 0, ej: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             byte[] salt = new byte[128 / 8];
             using (var rng = RandomNumberGenerator.Create())
             {
+                //Llena el array de sal con numeros aleatorios, ej: [1, 232, 33, 4, 5, 446, 7, 18, 9, 10, 11, 12, 13, 14, 15, 16]
                 rng.GetBytes(salt);
             }
 
@@ -34,10 +36,11 @@ namespace Medicare.Infrastructure.Services
             if (parts.Length != 2) return false;
 
             //Obteniendo las dos partes de la contraseña hasheada
+            //Convertir la sal de base64 a un array de bytes, que sera la misma que se utilizo para generar la contraseña hasheada
             var salt = Convert.FromBase64String(parts[0]);
             var hash = parts[1];
 
-            //Generar la contraseña hasheada con la sal y la contraseña ingresada
+            //Como ingreso la misma sal que se utilizo para generar la contraseña hasheada, se obtendra el mismo hash, que posteriormente comparare
             var providedHash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: providedPassword,
             salt: salt,
