@@ -13,7 +13,7 @@ namespace Medicare.Tests.Unit.Infrastructure
         [InlineData("IsThisPasswordValid?")]
         public void Password_Should_Be_Valid(string password)
         {
-            PasswordHasher passwordHasher = new PasswordHasher();
+            PasswordManager passwordHasher = new PasswordManager();
             string hashedPassword = passwordHasher.HashPassword(password);
             bool isValid = passwordHasher.VerifyPassword(password, hashedPassword);
             Assert.True(isValid);
@@ -32,7 +32,7 @@ namespace Medicare.Tests.Unit.Infrastructure
         [InlineData("HashMeIfYouCan34!", "HashMeIfYouCant34!")]
         public void Password_Should_Not_Be_Valid(string password, string wrongPassword)
         {
-            PasswordHasher passwordHasher = new PasswordHasher();
+            PasswordManager passwordHasher = new PasswordManager();
             string hashedPassword = passwordHasher.HashPassword(password);
             bool isValid = passwordHasher.VerifyPassword(wrongPassword, hashedPassword);
             Assert.False(isValid);
@@ -51,7 +51,7 @@ namespace Medicare.Tests.Unit.Infrastructure
         [InlineData("HashMeIfYouCan34!", "hashmeIfYouCan34!")]
         public void Password_Is_Case_Sensitive(string password, string wrongPassword)
         {
-            PasswordHasher passwordHasher = new PasswordHasher();
+            PasswordManager passwordHasher = new PasswordManager();
             string hashedPassword = passwordHasher.HashPassword(password);
             bool isValid = passwordHasher.VerifyPassword(wrongPassword.ToLower(), hashedPassword);
             Assert.False(isValid);

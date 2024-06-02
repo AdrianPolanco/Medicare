@@ -1,10 +1,11 @@
 ﻿
+using Medicare.Domain.Services;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
 
 namespace Medicare.Infrastructure.Services
 {
-    public class PasswordHasher
+    public class PasswordManager: IPasswordManager
     {
         public string HashPassword(string password)
         {

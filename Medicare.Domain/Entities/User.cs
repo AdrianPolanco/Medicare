@@ -11,10 +11,11 @@ namespace Medicare.Domain.Entities
         public string Username { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public Guid IdOffice { get; set; }
-        public Guid IdRole { get; set; }
-
+        public Guid OfficeId { get; set; }
+        public Guid? OwnedOfficeId { get; set; }
+        public Guid RoleId { get; set; }
         public virtual Office Office { get; set; }
+        public virtual Office OwnedOffice { get; set; }
         public virtual Role Role { get; set; }
     }
 }
