@@ -11,4 +11,12 @@
     <ProjectReference Include="..\Medicare.Domain\Medicare.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Context\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="8.0.6" />
+  </ItemGroup>
+
 </Project>
