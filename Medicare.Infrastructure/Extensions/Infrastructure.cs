@@ -1,6 +1,8 @@
-﻿using Medicare.Domain.Services;
+﻿using Medicare.Domain.Repositories;
+using Medicare.Domain.Services;
 using Medicare.Infrastructure.Context;
 using Medicare.Infrastructure.Options;
+using Medicare.Infrastructure.Repositories;
 using Medicare.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,10 @@ namespace Medicare.Infrastructure.Extensions
                 options.UseSqlServer(infrastructureOptions.Database);
             });
             services.AddSingleton<IPasswordManager, PasswordManager>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IOfficeRepository, OfficeRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            
             return services;
         }
     }

@@ -8,15 +8,13 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Medicare.Infrastructure.Repositories.Base
 {
-    public class PartialRepository<T> : IPartialRepository<T> where T : Entity
+    public class PartialRepository<T> : ReadOnlyRepository<T>, IPartialRepository<T> where T : Entity
     {
-        protected readonly DbSet<T> _dbSet;
         protected readonly ApplicationDbContext _context;
 
-        public PartialRepository(ApplicationDbContext context)
+        public PartialRepository(ApplicationDbContext context): base(context)
         {
             _context = context;
-            _dbSet = _context.Set<T>();
         }
 
         public virtual async Task AddAsync(T entity, CancellationToken cancellationToken)

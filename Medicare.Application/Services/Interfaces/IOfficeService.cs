@@ -1,4 +1,5 @@
-﻿using Medicare.Domain.Entities;
+﻿using Medicare.Application.Services.Interfaces.Base;
+using Medicare.Domain.Entities;
 
 namespace Medicare.Application.Services.Interfaces
 {

@@ -5,5 +5,6 @@ namespace Medicare.Domain.Repositories
 {
     public interface IUserRepository: IRepository<User>
     {
+        Task<bool> UserExists(string name, CancellationToken cancellationToken);
     }
 }

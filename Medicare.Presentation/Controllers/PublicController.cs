@@ -18,7 +18,7 @@ namespace Medicare.Presentation.Controllers
             return View();
         }
 
-        public IActionResult SignUp()
+        public async Task<IActionResult> SignUp()
         {
             return View();
         }

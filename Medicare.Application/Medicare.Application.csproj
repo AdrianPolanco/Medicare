@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Medicare.Domain\Medicare.Domain.csproj" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\Interfaces\" />
+    <ProjectReference Include="..\Medicare.Domain\Medicare.Domain.csproj" />
   </ItemGroup>
 
 </Project>

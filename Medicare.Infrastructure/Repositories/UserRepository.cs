@@ -2,6 +2,7 @@
 using Medicare.Domain.Repositories;
 using Medicare.Infrastructure.Context;
 using Medicare.Infrastructure.Repositories.Base;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Medicare.Infrastructure.Repositories
@@ -83,6 +84,18 @@ namespace Medicare.Infrastructure.Repositories
                     await RollbackAsync(cancellationToken);
                     throw new Exception(ex.Message);
                 }
+            }
+        }
+
+        public async Task<bool> UserExists(string name, CancellationToken cancellationToken)
+        {
+            try
+            {
+                return await _dbSet.AnyAsync(u => u.Name == name, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }
