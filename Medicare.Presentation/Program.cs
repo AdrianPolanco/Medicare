@@ -1,5 +1,6 @@
 using Medicare.Infrastructure.Options;
 using Medicare.Infrastructure.Extensions;
+using Medicare.Application.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.Configure<InfrastuctureOptions>(builder.Configuration.GetSection("InfrastructureOptions"));
 var infrastructureConfig = builder.Configuration.GetSection("InfrastructureOptions").Get<InfrastuctureOptions>();
-builder.Services.AddInfrastructure(infrastructureConfig);
+builder.Services.AddApplicationLayer();
+builder.Services.AddInfrastructureLayer(infrastructureConfig);
 
 var app = builder.Build();
 

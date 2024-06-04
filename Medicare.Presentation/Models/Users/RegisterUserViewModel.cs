@@ -8,13 +8,13 @@ namespace Medicare.Presentation.Models.Users
         [Required]
         [MinLength(1, ErrorMessage = "El nombre debe tener al menos 1 caracter")]
         [MaxLength(50, ErrorMessage = "El nombre no puede tener más de 50 caracteres")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "El nombre solo puede contener letras")]
+        [RegularExpression(@"^[a-zA-Z\s'-]*$", ErrorMessage = "El nombre solo puede contener letras")]
         public string Name { get; set; }
 
         [Required]
         [MinLength(3, ErrorMessage = "El apellido debe tener al menos 3 caracteres")]
         [MaxLength(100, ErrorMessage = "El apellido no puede tener más de 100 caracteres")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "El apellido solo puede contener letras")]
+        [RegularExpression(@"^[a-zA-Z\s'-]*$", ErrorMessage = "El apellido solo puede contener letras")]
         public string Lastname { get; set; }
 
         [Required]
@@ -23,8 +23,8 @@ namespace Medicare.Presentation.Models.Users
         public string Username { get; set; }
 
         [Required]
-        [EmailAddress(ErrorMessage = "El email no es válido")]
-        [MaxLength(100, ErrorMessage = "El email no puede tener más de 100 caracteres")]
+		[RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "El email no es válido")]
+		[MaxLength(100, ErrorMessage = "El email no puede tener más de 100 caracteres")]
         public string Email { get; set; }
 
 

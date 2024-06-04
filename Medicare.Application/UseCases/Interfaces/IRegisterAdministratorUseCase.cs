@@ -2,7 +2,7 @@
 
 namespace Medicare.Application.UseCases.Interfaces
 {
-    internal interface IRegisterAdministratorUseCase
+    public interface IRegisterAdministratorUseCase
     {
         Task<bool> ExecuteAsync(User user, string officeName, CancellationToken cancellationToken);
     }
