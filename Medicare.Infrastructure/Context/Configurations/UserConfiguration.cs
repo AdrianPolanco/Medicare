@@ -1,7 +1,6 @@
 ﻿using Medicare.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection.Emit;
 
 namespace Medicare.Infrastructure.Context.Configurations
 {
@@ -18,6 +17,7 @@ namespace Medicare.Infrastructure.Context.Configurations
             builder.Property(u => u.Password).HasMaxLength(300).IsRequired();
             builder.Property(u => u.Deleted).HasDefaultValue(false);
 
+
             builder
                 .HasOne(u => u.Office)
                 .WithMany(o => o.Users)
@@ -28,9 +28,7 @@ namespace Medicare.Infrastructure.Context.Configurations
                 .WithMany(r => r.Users)
                 .HasForeignKey(u => u.RoleId);
 
-            
-
-            builder.HasQueryFilter(u => !u.Deleted);
+			builder.HasQueryFilter(u => !u.Deleted);
         }
     }
 }

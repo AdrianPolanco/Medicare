@@ -12,12 +12,12 @@ namespace Medicare.Application.Services.Base
         {
             _readOnlyRepository = readOnlyRepository;
         }
-        public async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes)
+        public virtual async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes)
         {
             return await _readOnlyRepository.GetByIdAsync(id, cancellationToken, includes);
         }
 
-        public async Task<ICollection<T>> GetByPagesAsync(int page, CancellationToken cancellationToken, Expression<Func<T, bool>> filter, params Expression<Func<T, object>>[] includes)
+        public virtual async Task<ICollection<T>> GetByPagesAsync(int page, CancellationToken cancellationToken, Expression<Func<T, bool>> filter, params Expression<Func<T, object>>[] includes)
         {
             return await _readOnlyRepository.GetByPagesAsync(page, cancellationToken, filter, includes);
         }

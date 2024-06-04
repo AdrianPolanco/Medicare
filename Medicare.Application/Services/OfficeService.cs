@@ -14,12 +14,12 @@ namespace Medicare.Application.Services
 
         public override async Task<ICollection<Office>> GetByPagesAsync(int page, CancellationToken cancellationToken, Expression<Func<Office, bool>> filter, params Expression<Func<Office, object>>[] includes)
         {
-            return await base.GetByPagesAsync(page, cancellationToken, null, office => office.Users);
+            return await base.GetByPagesAsync(page, cancellationToken, null, office => office.Users, office => office.Owner);
         }
 
         public override async Task<Office?> GetByIdAsync(Guid id, CancellationToken cancellationToken, params Expression<Func<Office, object>>[] includes)
         {
-            return await base.GetByIdAsync(id, cancellationToken, office => office.Users);
+            return await base.GetByIdAsync(id, cancellationToken, office => office.Users, office => office.Owner);
         }
     }
 }

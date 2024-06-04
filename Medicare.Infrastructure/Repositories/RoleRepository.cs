@@ -15,7 +15,7 @@ namespace Medicare.Infrastructure.Repositories
 
         public async Task<Role?> GetByNameAsync(string name, CancellationToken cancellationToken)
         {
-            return await _dbSet.FirstOrDefaultAsync(r => r.Name == name, cancellationToken);
+            return await _dbSet.Include(r => r.Users).FirstOrDefaultAsync(r => r.Name == name, cancellationToken);
         }
     }
 }

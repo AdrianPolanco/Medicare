@@ -35,7 +35,19 @@ namespace Medicare.Infrastructure.Repositories.Base
             }
         }
 
-        protected Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken)
+		public virtual async Task UpdateAsync(T entity, CancellationToken cancellationToken)
+		{
+			try
+			{
+				_dbSet.Update(entity);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		protected Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken)
         {
             return _context.Database.BeginTransactionAsync();
         }

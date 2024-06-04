@@ -22,7 +22,7 @@ namespace Medicare.Application.UseCases.Users
         public async Task<bool> ExecuteAsync(User user, string officeName, CancellationToken cancellationToken)
         {
             //Validando si el usuario ya existe
-            bool userExists = await _userService.UserExists(user.Name, cancellationToken);
+            bool userExists = await _userService.UserExists(user.Username, cancellationToken);
             if(userExists) return false;
 
             //Hasheando la contraseña
@@ -44,14 +44,25 @@ namespace Medicare.Application.UseCases.Users
             //Registrando la oficina
             await _officeService.AddAsync(office, cancellationToken);
 
-            //Asignando la oficina al usuario
-            user.OfficeId = office.Id;
+			//Asignando la oficina al usuario
+			user.OfficeId = office.Id;
 
-            //Asignando la oficina como oficina propiedad del usuario
-            user.OwnedOfficeId = office.Id;
+			//Asignando la oficina como oficina propiedad del usuario
+			user.OwnedOfficeId = office.Id;
 
-            //Registrando el usuario
-            await _userService.AddAsync(user, cancellationToken);
+			//Registrando el usuario
+			await _userService.AddAsync(user, cancellationToken);
+
+			Office ownedOffice = new Office
+            {
+                Id = office.Id,
+				OwnerId = user.Id
+			};
+
+			//Actualizando la oficina para asignarle el propietario
+			await _officeService.UpdateAsync(ownedOffice, cancellationToken);
+  
+            //Caso de uso ejecutado exitosamente
             return true;
 
         }

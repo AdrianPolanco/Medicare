@@ -21,7 +21,7 @@ namespace Medicare.Infrastructure.Repositories.Base
                 {
                     T entity = await GetByIdAsync(id, cancellationToken);
                     entity.Deleted = true;
-                    base._dbSet.Update(entity);
+                    _dbSet.Update(entity);
                     await SaveChangesAsync(cancellationToken);
                     await CommitAsync(cancellationToken);
                 }
@@ -62,18 +62,6 @@ namespace Medicare.Infrastructure.Repositories.Base
             try
             {
                 return await _readOnlyRepository.GetRowsCountAsync(cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public virtual async Task UpdateAsync(T entity, CancellationToken cancellationToken)
-        {
-            try
-            {
-                _dbSet.Update(entity);
             }
             catch (Exception ex)
             {

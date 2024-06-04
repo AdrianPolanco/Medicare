@@ -87,11 +87,11 @@ namespace Medicare.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> UserExists(string name, CancellationToken cancellationToken)
+        public async Task<bool> UserExists(string username, CancellationToken cancellationToken)
         {
             try
             {
-                return await _dbSet.AnyAsync(u => u.Name == name, cancellationToken);
+                return await _dbSet.AnyAsync(u => u.Username == username, cancellationToken);
             }
             catch (Exception ex)
             {

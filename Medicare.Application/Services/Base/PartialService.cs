@@ -36,5 +36,10 @@ namespace Medicare.Application.Services.Base
         {
             return await _partialRepository.GetRowsCountAsync(cancellationToken);
         }
-    }
+
+		public async Task UpdateAsync(T entity, CancellationToken cancellationToken)
+		{
+			await _partialRepository.UpdateAsync(entity, cancellationToken);
+		}
+	}
 }

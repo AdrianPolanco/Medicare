@@ -12,7 +12,7 @@ namespace Medicare.Domain.Entities
         public string Email { get; set; }
         public string Password { get; set; }
         public Guid OfficeId { get; set; }
-        public Guid? OwnedOfficeId { get; set; }
+        public Guid? OwnedOfficeId { get; set; } = null;
         public Guid RoleId { get; set; }
         public virtual Office Office { get; set; }
         public virtual Office OwnedOffice { get; set; }
