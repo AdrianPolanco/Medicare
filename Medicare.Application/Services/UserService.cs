@@ -22,7 +22,7 @@ namespace Medicare.Application.Services
             return await base.GetByIdAsync(id, cancellationToken, user => user.Role, user => user.Office, user => user.OwnedOffice);
         }
 
-        public async Task<bool> UserExists(string name, CancellationToken cancellationToken)
+        public async Task<User?> UserExists(string name, CancellationToken cancellationToken)
         {
             return await ((IUserRepository)_repository).UserExists(name, cancellationToken);
         }

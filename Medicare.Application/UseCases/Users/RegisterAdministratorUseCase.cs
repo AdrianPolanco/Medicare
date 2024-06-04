@@ -22,8 +22,8 @@ namespace Medicare.Application.UseCases.Users
         public async Task<bool> ExecuteAsync(User user, string officeName, CancellationToken cancellationToken)
         {
             //Validando si el usuario ya existe
-            bool userExists = await _userService.UserExists(user.Username, cancellationToken);
-            if(userExists) return false;
+            User userExists = await _userService.UserExists(user.Username, cancellationToken);
+            if(userExists != null) return false;
 
             //Hasheando la contraseña
             string password = _passwordManager.HashPassword(user.Password);
