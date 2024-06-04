@@ -10,13 +10,21 @@ namespace Medicare.Application.Services
 	{
 		private readonly IPasswordManager _passwordManager;
 		private readonly IUserService _userService;
+		private User? _user;
 
         public AuthenticationService(IPasswordManager passwordManager, IUserService userService)
         {
 			_passwordManager = passwordManager;
 			_userService = userService;
+			_user = null;
         }
-        public async Task<bool> LogIn(User user, CancellationToken cancellationToken)
+
+		public User? GetUser()
+		{
+			return _user;
+		}
+
+		public async Task<bool> LogIn(User user, CancellationToken cancellationToken)
 		{
 			User? existingUser = await _userService.UserExists(user.Username, cancellationToken);
 			if(existingUser is null) return false;
@@ -24,6 +32,8 @@ namespace Medicare.Application.Services
 			string password = user.Password;
 
 			bool isValidPassword = _passwordManager.VerifyPassword(password, existingUser.Password);
+
+			if(isValidPassword) _user = existingUser;
 
 			return isValidPassword;
 		}

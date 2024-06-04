@@ -9,13 +9,17 @@ namespace Medicare.Presentation.Controllers
 {
     public class PublicController : Controller
     {
-        private readonly ILogger<PublicController> _logger;
-        private readonly IRegisterAdministratorUseCase _registerAdministratorUseCase;
 
-        public PublicController(ILogger<PublicController> logger, IRegisterAdministratorUseCase registerAdministratorUseCase)
+        private readonly IRegisterAdministratorUseCase _registerAdministratorUseCase;
+        private readonly ILoginUserUseCase _loginUserUseCase;
+
+        public PublicController(
+            IRegisterAdministratorUseCase registerAdministratorUseCase,
+            ILoginUserUseCase loginUserUseCase
+            )
         {
-            _logger = logger;
             _registerAdministratorUseCase = registerAdministratorUseCase;
+            _loginUserUseCase = loginUserUseCase;
         }
 
         public IActionResult Index()
@@ -57,6 +61,27 @@ namespace Medicare.Presentation.Controllers
             }
 
             return RedirectToAction("Success");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(LoginViewModel loginViewModel, CancellationToken cancellationToken)
+        {
+            if(!ModelState.IsValid) return View(loginViewModel);
+
+
+            User userCredentials = new User
+            {
+                Username = loginViewModel.Username,
+                Password = loginViewModel.Password
+            };
+            User? user = await _loginUserUseCase.ExecuteAsync(userCredentials, cancellationToken);
+
+            if (user is not null) return RedirectToRoute(new {controller = "Authenticated", action = "Index"});
+
+            ModelState.AddModelError("Username", "Usuario o contraseña incorrectos");
+
+            return View(loginViewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

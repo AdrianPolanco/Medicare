@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Medicare.Domain\Medicare.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+
 </Project>

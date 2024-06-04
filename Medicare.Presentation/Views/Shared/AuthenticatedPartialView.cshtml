@@ -1,0 +1,83 @@
+﻿@{
+    var isAdmin = false;
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Medicare</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Medicare.Presentation.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+    <script src="https://kit.fontawesome.com/a177f3304c.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <nav class="font-sans flex flex-col text-center content-center sm:flex-row sm:text-left sm:justify-between py-2 px-6 bg-white sm:items-baseline w-full">
+
+            <div class="mb-2 sm:mb-0 flex flex-col items-center">
+                <div class="h-10  flex flex-row items-center justify-content-center">
+                    <i class="fa-solid fa-staff-snake text-teal-400 text-3xl"></i>
+                    <div class="ml-2">
+                        <a href="#" class="text-2xl no-underline text-teal-300 hover:text-teal-200 font-sans font-bold">MediCare</a><br>
+                    </div>
+                </div>
+
+                <div>
+                    <span class="text-xs text-grey-dark">Conectados con tu salud</span>
+                </div>
+            </div>
+
+
+            <div class="sm:mb-0 self-center">
+                @if (isAdmin)
+                {
+                    <ul>
+                        <a type="button" class="inline-flex items-center gap-x-2 rounded-md px-3.5 py-2.5 text-sm font-semibold text-teal-300 hover:underline hover:decoration-teal-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                            <i class="fa-solid fa-user"></i>
+                            <span>Usuarios</span>
+                        </a>
+                        <a type="button" class="inline-flex items-center gap-x-2 rounded-md px-3.5 py-2.5 text-sm font-semibold text-teal-300 hover:underline hover:decoration-teal-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            <span>Medicos</span>
+                        </a>
+                        <a type="button" class="inline-flex items-center gap-x-2 rounded-md px-3.5 py-2.5 text-sm font-semibold text-teal-300 hover:underline hover:decoration-teal-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                            <i class="fa-solid fa-vial-virus"></i>
+                            <span>Pruebas de laboratorio</span>
+                        </a>
+                    </ul>
+                }
+                else
+                {
+                    <ul>
+                        <a type="button" class="inline-flex items-center gap-x-2 rounded-md px-3.5 py-2.5 text-sm font-semibold text-teal-300 hover:underline hover:decoration-teal-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                            <i class="fa-solid fa-hospital-user"></i>
+                            <span>Pacientes</span>
+                        </a>
+                        <a type="button" class="inline-flex items-center gap-x-2 rounded-md px-3.5 py-2.5 text-sm font-semibold text-teal-300 hover:underline hover:decoration-teal-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            <span>Citas</span>
+                        </a>
+                        <a type="button" class="inline-flex items-center gap-x-2 rounded-md px-3.5 py-2.5 text-sm font-semibold text-teal-300 hover:underline hover:decoration-teal-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                            <i class="fa-solid fa-flask-vial"></i>
+                            <span>Resultados</span>
+                        </a>
+                    </ul>
+                }
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
