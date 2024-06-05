@@ -1,10 +1,12 @@
 ﻿
+using Medicare.Application.Models;
+
 namespace Medicare.Application.Services.Interfaces
 {
-    public interface ISessionService<T> where T : class
+    public interface ISessionService
     {
-        void SetSession(string key, T value);  
-        T GetSession(string key);
+        void SetSession(string key, UserSessionInfo value);  
+        UserSessionInfo GetSession(string key);
         void RemoveSession(string key);
     }
 }

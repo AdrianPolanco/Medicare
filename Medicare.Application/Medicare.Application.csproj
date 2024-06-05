@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Enums\" />
+    <Folder Include="Session\" />
   </ItemGroup>
 
 </Project>
