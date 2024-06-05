@@ -5,11 +5,6 @@ namespace Medicare.Presentation.Models.Users
 {
     public class AuthenticatedViewModel
     {
-        public AuthenticatedViewModel(User user, List<Role> roles)
-        {
-            CurrentUser = user;
-            Roles = roles;
-        }
 
         [Required]
         public User CurrentUser { get; set; }

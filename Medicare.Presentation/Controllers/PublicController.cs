@@ -79,7 +79,7 @@ namespace Medicare.Presentation.Controllers
             };
             User? user = await _loginUserUseCase.ExecuteAsync(userCredentials, cancellationToken);
 
-            if (user is not null) return RedirectToRoute(new {controller = "Authenticated", action = "Index"});
+            if (user is not null) return RedirectToRoute(new {controller = "Admin", action = "Index"});
 
             ModelState.AddModelError("Username", "Usuario o contraseña incorrectos");
 

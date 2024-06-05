@@ -5,8 +5,6 @@ namespace Medicare.Presentation.Models.Users
 {
     public class RegisterUserFromAdminUserViewModel: AuthenticatedViewModel, IValidatableObject
     {
-            public RegisterUserFromAdminUserViewModel(User user, List<Role> roles): base(user, roles)
-            { }
 
             [Required]
             [MinLength(1, ErrorMessage = "El nombre debe tener al menos 1 caracter")]

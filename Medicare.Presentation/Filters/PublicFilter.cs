@@ -20,7 +20,7 @@ namespace Medicare.Presentation.Filters
             if( userSessionInfo != null 
                 && userSessionInfo.UserId != Guid.Empty
                 && userSessionInfo.OfficeId != Guid.Empty
-                && userSessionInfo.RoleId != Guid.Empty) context.Result = new RedirectToActionResult("Index", "Authenticated", null);
+                && userSessionInfo.RoleId != Guid.Empty) context.Result = new RedirectToActionResult("Index", "Admin", null);
         }
     }
 }
