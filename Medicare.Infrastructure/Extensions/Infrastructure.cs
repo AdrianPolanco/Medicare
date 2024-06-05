@@ -1,7 +1,7 @@
 ﻿using Medicare.Domain.Entities;
 using Medicare.Domain.Repositories;
 using Medicare.Domain.Repositories.Base;
-using Medicare.Domain.Services;
+using Medicare.Domain.Helpers;
 using Medicare.Infrastructure.Context;
 using Medicare.Infrastructure.Options;
 using Medicare.Infrastructure.Repositories;
@@ -9,6 +9,8 @@ using Medicare.Infrastructure.Repositories.Base;
 using Medicare.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;
+using System.Text.Json;
 
 namespace Medicare.Infrastructure.Extensions
 {
@@ -29,6 +31,17 @@ namespace Medicare.Infrastructure.Extensions
             services.AddScoped<IRoleRepository, RoleRepository>();
             
             return services;
+        }
+
+        public static void SetObject<T>(this ISession session, string key, T value)
+        {
+            session.SetString(key, JsonSerializer.Serialize(value));
+        }
+
+        public static T GetObject<T>(this ISession session, string key)
+        {
+            var value = session.GetString(key);
+            return value == null ? default : JsonSerializer.Deserialize<T>(value);
         }
     }
 }

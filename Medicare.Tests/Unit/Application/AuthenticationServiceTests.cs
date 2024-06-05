@@ -1,7 +1,7 @@
 ﻿using Medicare.Application.Services;
 using Medicare.Application.Services.Interfaces;
 using Medicare.Domain.Entities;
-using Medicare.Domain.Services;
+using Medicare.Domain.Helpers;
 using Medicare.Infrastructure.Services;
 using Moq;
 

@@ -1,6 +1,6 @@
 ﻿
 
-namespace Medicare.Domain.Services
+namespace Medicare.Domain.Helpers
 {
     public interface IPasswordManager
     {
