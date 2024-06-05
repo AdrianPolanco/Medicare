@@ -17,7 +17,7 @@ namespace Medicare.Presentation.Controllers
 			_userService = userService;
         }
 
-        public async Task<ActionResult> Index(CancellationToken cancellationToken)
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
 		{
 			UserSessionInfo userSessionInfo = _sessionService.GetSession(UserSessionInfo.UserSessionKey);
 			User user = await _userService.GetByIdAsync(userSessionInfo.UserId, cancellationToken);
@@ -25,10 +25,15 @@ namespace Medicare.Presentation.Controllers
 			return View(user);
 		}
 
-		public ActionResult LogOut()
+		public IActionResult LogOut()
 		{
 			_sessionService.RemoveSession(UserSessionInfo.UserSessionKey);
 			return RedirectToAction("Index", "Public");
+		}
+
+		public IActionResult CreateNewUser()
+		{
+			return View();
 		}
 	}
 }
