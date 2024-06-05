@@ -24,5 +24,11 @@ namespace Medicare.Presentation.Controllers
 			
 			return View(user);
 		}
+
+		public ActionResult LogOut()
+		{
+			_sessionService.RemoveSession(UserSessionInfo.UserSessionKey);
+			return RedirectToAction("Index", "Public");
+		}
 	}
 }
