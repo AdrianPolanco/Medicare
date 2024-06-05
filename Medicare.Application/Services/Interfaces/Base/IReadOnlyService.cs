@@ -8,7 +8,7 @@ namespace Medicare.Application.Services.Interfaces.Base
         Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken,
             params Expression<Func<T, object>>[] includes);
         Task<int> GetRowsCountAsync(CancellationToken cancellationToken);
-        Task<ICollection<T>> GetByPagesAsync(int page, CancellationToken cancellationToken, Expression<Func<T, bool>> filter,
+        Task<ICollection<T>> GetByPagesAsync(int page, CancellationToken cancellationToken, Expression<Func<T, bool>> filter = null,
             params Expression<Func<T, object>>[] includes);
     }
 }

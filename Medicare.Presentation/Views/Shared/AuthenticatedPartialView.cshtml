@@ -1,5 +1,5 @@
-﻿@using Medicare.Domain.Entities
-@model User;
+﻿@using Medicare.Presentation.Models.Users
+@model AuthenticatedViewModel;
 
 
 <!DOCTYPE html>
@@ -33,10 +33,10 @@
 
             <div class="sm:mb-0 self-center">        
                 <ul class="flex gap-x-4">
-                @if (Model.Role.Name == "Administrador")
+                @if (Model.CurrentUser.Role.Name == "Administrador")
                 {
                        <li> 
-                           <a type="button" class="inline-flex items-center gap-x-2 rounded-md px-3.5 py-2.5 text-sm font-semibold text-teal-300 hover:underline hover:decoration-teal-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
+                           <a asp-controller="Authenticated" asp-action="CreateNewUser" class="inline-flex items-center gap-x-2 rounded-md px-3.5 py-2.5 text-sm font-semibold text-teal-300 hover:underline hover:decoration-teal-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
                             <i class="fa-solid fa-user"></i>
                             <span>Usuarios</span>
                             </a>
