@@ -23,6 +23,7 @@ namespace Medicare.Application.Extensions
             services.AddScoped<IRegisterAdministratorUseCase, RegisterAdministratorUseCase>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<ILoginUserUseCase, LoginUserUseCase>();
+            services.AddScoped<IRegisterUserFromAdminAccountUseCase, RegisterUserFromAdminAccountUseCase>();
 
             return services;
         }

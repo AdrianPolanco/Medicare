@@ -1,4 +1,4 @@
-﻿using Medicare.Domain.Entities;
+﻿
 using System.ComponentModel.DataAnnotations;
 
 namespace Medicare.Presentation.Models.Users
@@ -28,7 +28,6 @@ namespace Medicare.Presentation.Models.Users
             [MaxLength(100, ErrorMessage = "El email no puede tener más de 100 caracteres")]
             public string Email { get; set; }
 
-            public string OfficeName { get; set; }
 
             [Required(ErrorMessage = "La contraseña es requerida")]
             [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres")]
@@ -47,5 +46,18 @@ namespace Medicare.Presentation.Models.Users
             {
                 if (Password != ConfirmPassword) yield return new ValidationResult("Las contraseñas no coinciden", new[] { nameof(Password), nameof(ConfirmPassword) });
             }
+
+        public bool IsRegisterUserViewModelValid()
+        {
+            return Validate(new ValidationContext(this))
+                .Where(v => v.MemberNames.Contains(nameof(Name)) ||
+                            v.MemberNames.Contains(nameof(Lastname)) ||
+                            v.MemberNames.Contains(nameof(Username)) ||
+                            v.MemberNames.Contains(nameof(Email)) ||
+                            v.MemberNames.Contains(nameof(Password)) ||
+                            v.MemberNames.Contains(nameof(ConfirmPassword)) ||
+                            v.MemberNames.Contains(nameof(RoleId)))
+                .Count() == 0;
+        }
     }
 }
