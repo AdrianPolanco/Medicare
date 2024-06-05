@@ -1,9 +1,10 @@
-﻿
+﻿@using Medicare.Domain.Entities
+@model User;
 @{
     Layout = "~/Views/Shared/AuthenticatedPartialView.cshtml";
     ViewData["Title"] = "Menú principal";
 }
 
 <div>
-Inicio
+Bienvenido, @Model.Name
 </div>

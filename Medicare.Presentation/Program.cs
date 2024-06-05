@@ -1,12 +1,15 @@
 using Medicare.Infrastructure.Options;
 using Medicare.Infrastructure.Extensions;
 using Medicare.Application.Extensions;
+using Medicare.Presentation.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<PublicFilter>();
+builder.Services.AddScoped<SessionAuthenticationFilter>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {

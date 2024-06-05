@@ -8,6 +8,7 @@ namespace Medicare.Infrastructure.Services
 {
     public class SessionService: ISessionService
     {
+
         private readonly IHttpContextAccessor _httpContextAccesor;
         public SessionService(IHttpContextAccessor httpContextAccessor)
         {

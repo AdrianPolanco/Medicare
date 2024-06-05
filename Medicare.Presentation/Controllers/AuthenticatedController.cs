@@ -1,4 +1,6 @@
-﻿using Medicare.Application.Services.Interfaces;
+﻿using Medicare.Application.Models;
+using Medicare.Application.Services.Interfaces;
+using Medicare.Domain.Entities;
 using Medicare.Presentation.Filters;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,10 +17,12 @@ namespace Medicare.Presentation.Controllers
 			_userService = userService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index(CancellationToken cancellationToken)
 		{
-
-			return View();
+			UserSessionInfo userSessionInfo = _sessionService.GetSession(UserSessionInfo.UserSessionKey);
+			User user = await _userService.GetByIdAsync(userSessionInfo.UserId, cancellationToken);
+			
+			return View(user);
 		}
 	}
 }

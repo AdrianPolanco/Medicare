@@ -1,5 +1,6 @@
 ﻿using Medicare.Application.UseCases.Interfaces;
 using Medicare.Domain.Entities;
+using Medicare.Presentation.Filters;
 using Medicare.Presentation.Models;
 using Medicare.Presentation.Models.Users;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 
 namespace Medicare.Presentation.Controllers
 {
+    [ServiceFilter(typeof(PublicFilter))]
     public class PublicController : Controller
     {
 

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
+using Medicare.Application.Services.Interfaces;
 
 namespace Medicare.Infrastructure.Extensions
 {
@@ -29,6 +30,7 @@ namespace Medicare.Infrastructure.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<ISessionService, SessionService>();
             
             return services;
         }
