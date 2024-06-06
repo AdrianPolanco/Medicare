@@ -14,7 +14,6 @@ namespace Medicare.Infrastructure.Repositories.Base
         {
             _dbSet = context.Set<T>();
         }
-
         public virtual async Task<T?> GetByIdAsync(Guid id, CancellationToken cancellationToken, params Expression<Func<T, object>>[] includes)
         {
             try

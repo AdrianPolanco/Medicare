@@ -14,7 +14,7 @@ namespace Medicare.Application.Services
 
         public override async Task<ICollection<User>> GetByPagesAsync(int page, CancellationToken cancellationToken, Expression<Func<User, bool>> filter = null, params Expression<Func<User, object>>[] includes)
         {
-            return await base.GetByPagesAsync(page, cancellationToken, null, user => user.Role, user => user.Office, user => user.OwnedOffice);
+            return await base.GetByPagesAsync(page, cancellationToken, filter, user => user.Role, user => user.Office, user => user.OwnedOffice);
         }
 
         public override async Task<User?> GetByIdAsync(Guid id, CancellationToken cancellationToken, params Expression<Func<User, object>>[] includes)

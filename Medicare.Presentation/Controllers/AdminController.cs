@@ -1,10 +1,13 @@
-﻿using Medicare.Application.Models;
+﻿using Medicare.Application.Enums;
+using Medicare.Application.Models;
 using Medicare.Application.Services.Interfaces;
 using Medicare.Application.UseCases.Interfaces;
 using Medicare.Domain.Entities;
 using Medicare.Presentation.Filters;
+using Medicare.Presentation.Helpers;
 using Medicare.Presentation.Models.Users;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 
 namespace Medicare.Presentation.Controllers
 {
@@ -28,13 +31,23 @@ namespace Medicare.Presentation.Controllers
             _roleService = roleService;
             _registerUserFromAdminAccountUseCase = registerUserFromAdminAccountUseCase;
         }
-        public async Task<IActionResult> Index(CancellationToken cancellationToken)
+        public async Task<IActionResult> Index(int? page, string search, UserFilterOptions? option, CancellationToken cancellationToken)
         {
+            page = page ?? 1;
+
+         
             var recoveredRoles = await _roleService.GetByPagesAsync(1, cancellationToken);
             UserSessionInfo userSessionInfo = _sessionService.GetSession(UserSessionInfo.UserSessionKey);
+            Expression<Func<User, bool>> searchFilter = FilterHelper.GetUserFilter(option, search, userSessionInfo.OfficeId);
             User user = await _userService.GetByIdAsync(userSessionInfo.UserId, cancellationToken);
-            AuthenticatedViewModel authenticatedViewModel = new AuthenticatedViewModel { CurrentUser = user, Roles = recoveredRoles.ToList() };
-            return View(authenticatedViewModel);
+            ICollection<User> recoveredUsers = await _userService.GetByPagesAsync((int)page, cancellationToken, searchFilter);
+            List<User> users = recoveredUsers.ToList();
+            UsersMenuViewModel usersMenuViewModel = new UsersMenuViewModel { 
+                Users = users, 
+                Admins = UserFilterOptions.Admins, 
+                Pages = (int)page,
+                CurrentUser = user, Roles = recoveredRoles.ToList() };
+            return View(usersMenuViewModel);
         }
 
         public async Task<IActionResult> CreateNewUser(CancellationToken cancellationToken)
