@@ -15,7 +15,7 @@
 </head>
 <body>
     <header>
-        <nav class="font-sans flex flex-col text-center content-center sm:flex-row sm:text-left sm:justify-between py-2 px-6 bg-white sm:items-baseline w-full">
+        <nav class="font-sans flex text-center content-center sm:flex-row sm:text-left sm:justify-between py-2 px-6 bg-white sm:items-baseline w-full">
 
             <div class="mb-2 sm:mb-0 flex flex-col items-center">
                 <div class="h-10  flex flex-row items-center justify-content-center">
@@ -78,6 +78,10 @@
                         </li>
 
                     }
+                    <li class="flex font-semibold text-sm items-center gap-x-1">
+                        <i class="fa-solid fa-circle-user"></i>
+                        @Model.CurrentUser.Name @Model.CurrentUser.Lastname
+                    </li>
                     <li><form id="logoutForm" method="post" asp-action="Logout" asp-controller="Authenticated">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="inline-flex items-center gap-x-2 rounded-md px-3.5 py-2.5 text-sm font-semibold text-gray-300 hover:text-black hover:underline hover:decoration-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
