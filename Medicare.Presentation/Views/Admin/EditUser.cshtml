@@ -37,8 +37,9 @@
                     </div>
                 </div>
 
-                <form asp-action="SaveNewUser" method="post" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
+                <form asp-action="UpdateUser" method="post" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
                     @Html.AntiForgeryToken()
+                    <input asp-for="Id" type="hidden" />
                     <div>
                         <label asp-for="Name" class="block mb-2 text-sm text-gray-600">Nombre</label>
                         <input asp-for="Name" type="text" placeholder="John" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
@@ -76,7 +77,7 @@
                     </div>
                     <div class="flex flex-col gap-x-2 justify-center items-start">
                         <label class="block mb-2 text-sm text-gray-600">Nombre del consultorio</label>
-                        <input type="hidden" value="currentUser.OfficeId" name="currentOffice" />
+                        <input type="hidden" asp-for="OfficeName" />
                         <div class="w-1/4 py-1 px-2 bg-teal-300 rounded-md">
                             <span class="text-white font-semibold">@currentUser.Office.Name</span>
                         </div>

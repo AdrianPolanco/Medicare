@@ -18,18 +18,21 @@ namespace Medicare.Presentation.Controllers
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
         private readonly IRegisterUserFromAdminAccountUseCase _registerUserFromAdminAccountUseCase;
+        private readonly IUpdateUserUseCase _updateUserUseCase;
 
         public AdminController(
             ISessionService sessionService, 
             IUserService userService, 
             IRoleService roleService,
-            IRegisterUserFromAdminAccountUseCase registerUserFromAdminAccountUseCase
+            IRegisterUserFromAdminAccountUseCase registerUserFromAdminAccountUseCase,
+            IUpdateUserUseCase updateUserUseCase
             )
         {
             _sessionService = sessionService;
             _userService = userService;
             _roleService = roleService;
             _registerUserFromAdminAccountUseCase = registerUserFromAdminAccountUseCase;
+            _updateUserUseCase = updateUserUseCase;
         }
         public async Task<IActionResult> Index(int? page, string search, UserFilterOptions? option, CancellationToken cancellationToken)
         {
@@ -56,15 +59,15 @@ namespace Medicare.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveNewUser(RegisterUserFromAdminUserViewModel registerUserFromAdminUserViewModel, CancellationToken cancellationToken)
         {
-            User currentUser = await _sessionService.GetCurrentUser();
-            ICollection<Role> rolesCollection = await _roleService.GetByPagesAsync(1, cancellationToken);
+              User currentUser = await _sessionService.GetCurrentUser();
+              ICollection<Role> rolesCollection = await _roleService.GetByPagesAsync(1, cancellationToken);
 
-            User? userExists = await _userService.UserExists(registerUserFromAdminUserViewModel.Username, cancellationToken);
-            if(userExists is not null)
-            {
-                ModelState.AddModelError("Username", "El nombre de usuario ya existe");
-                return View("CreateNewUser", registerUserFromAdminUserViewModel);
-            }
+              User? userExists = await _userService.UserExists(registerUserFromAdminUserViewModel.Username, cancellationToken);
+              if(userExists is not null)
+              {
+                  ModelState.AddModelError("Username", "El nombre de usuario ya existe");
+                  return View("CreateNewUser", registerUserFromAdminUserViewModel);
+              }
               if (!ModelState.IsValid)
               {
                   return View("CreateNewUser", registerUserFromAdminUserViewModel);
@@ -88,9 +91,7 @@ namespace Medicare.Presentation.Controllers
 
         public async Task<IActionResult> EditUser(Guid id, CancellationToken cancellationToken)
         {
-            UserSessionInfo userSessionInfo = _sessionService.GetSession();
             User userToEdit = await _userService.GetByIdAsync(id, cancellationToken);
-            ICollection<Role> rolesCollection = await _roleService.GetByPagesAsync(1, cancellationToken);
 
             UpdateUserFromAdminViewModel updateUserFromAdminUserViewModel = new UpdateUserFromAdminViewModel
             {
@@ -104,5 +105,29 @@ namespace Medicare.Presentation.Controllers
 
             return View(updateUserFromAdminUserViewModel);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateUser(UpdateUserFromAdminViewModel updateUserFromAdminViewModel, CancellationToken cancellationToken)
+        {
+            if(!ModelState.IsValid) return View("EditUser", updateUserFromAdminViewModel);
+
+            User currentUser = await _sessionService.GetCurrentUser();
+
+            User user = new User
+            {
+                Id = updateUserFromAdminViewModel.Id,
+                Name = updateUserFromAdminViewModel.Name,
+                Lastname = updateUserFromAdminViewModel.Lastname,
+                Username = updateUserFromAdminViewModel.Username,
+                Email = updateUserFromAdminViewModel.Email,
+                RoleId = updateUserFromAdminViewModel.RoleId,
+                Password = updateUserFromAdminViewModel.Password,
+                OfficeId = currentUser.OfficeId
+            };
+
+            await _updateUserUseCase.ExecuteAsync(user, cancellationToken);
+
+            return RedirectToAction("Index");
+        }   
     }
 }
