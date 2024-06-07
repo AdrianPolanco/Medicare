@@ -157,35 +157,27 @@
 </div>
     <nav>
         <ul class="flex">
-            <li>
-                <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
-                   href="#"
-                   aria-label="Previous">
-                    <span class="material-icons text-sm">keyboard_arrow_left</span>
-                </a>
-            </li>
             @for (int i = 1; i <= Model.Pages; i++)
             {
-                <li>
-                    <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-tr from-teal-600 to-teal-300 p-0 text-sm text-white shadow-md shadow-teal-400/20 transition duration-150 ease-in-out"
-                       href="#">
-                        @i
-                    </a>
-                </li>
+                if (i == Model.CurrentPage)
+                {
+                    <li>
+                        <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-tr from-teal-600 to-teal-300 p-0 text-sm text-white shadow-md shadow-teal-400/20 transition duration-150 ease-in-out"
+                         >
+                            @i
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
+                           asp-controller="Admin" asp-action="Index" asp-route-page="@i">
+                           @i
+                        </a>
+                    </li>
+                }            
             }
-            <li>
-                <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
-                   href="#">
-                   100
-                </a>
-            </li>
-            <li>
-                <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
-                   href="#"
-                   aria-label="Next">
-                    <span class="material-icons text-sm">keyboard_arrow_right</span>
-                </a>
-            </li>
         </ul>
     </nav>
 

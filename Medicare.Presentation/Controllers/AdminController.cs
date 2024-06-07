@@ -38,10 +38,12 @@ namespace Medicare.Presentation.Controllers
             Expression<Func<User, bool>> searchFilter = FilterHelper.GetUserFilter(option, search, userSessionInfo.OfficeId);
             ICollection<User> recoveredUsers = await _userService.GetByPagesAsync((int)page, cancellationToken, searchFilter);
             List<User> users = recoveredUsers.ToList();
+            int pages = await _userService.GetRowsCountAsync(cancellationToken);
             UsersMenuViewModel usersMenuViewModel = new UsersMenuViewModel { 
                 Users = users, 
                 Admins = UserFilterOptions.Admins, 
-                Pages = (int)page 
+                Pages = pages,
+                CurrentPage = (int)page
             };
             return View(usersMenuViewModel);
         }
