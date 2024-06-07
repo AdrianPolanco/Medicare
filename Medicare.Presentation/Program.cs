@@ -10,6 +10,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<PublicFilter>();
 builder.Services.AddScoped<SessionAuthenticationFilter>();
+builder.Services.AddScoped<AdminAuthorizationFilter>();
+builder.Services.AddScoped<AssistantAuthorizationFilter>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {

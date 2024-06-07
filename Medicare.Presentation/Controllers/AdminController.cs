@@ -12,6 +12,7 @@ using System.Linq.Expressions;
 namespace Medicare.Presentation.Controllers
 {
     [ServiceFilter(typeof(SessionAuthenticationFilter))]
+    [ServiceFilter(typeof(AdminAuthorizationFilter))]
     public class AdminController : Controller
     {
         private readonly ISessionService _sessionService;
