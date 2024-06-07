@@ -3,19 +3,21 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Medicare.Presentation.Models.Users
 {
-    public class RegisterUserFromAdminUserViewModel: AuthenticatedViewModel, IValidatableObject
+    public class RegisterUserFromAdminUserViewModel: IValidatableObject
     {
 
             [Required]
             [MinLength(1, ErrorMessage = "El nombre debe tener al menos 1 caracter")]
             [MaxLength(50, ErrorMessage = "El nombre no puede tener más de 50 caracteres")]
-            [RegularExpression(@"^[a-zA-Z\s'-]*$", ErrorMessage = "El nombre solo puede contener letras")]
+            [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]*$", 
+            ErrorMessage = "El apellido solo puede contener letras y caracteres latinos")]
             public string Name { get; set; }
 
             [Required]
             [MinLength(3, ErrorMessage = "El apellido debe tener al menos 3 caracteres")]
             [MaxLength(100, ErrorMessage = "El apellido no puede tener más de 100 caracteres")]
-            [RegularExpression(@"^[a-zA-Z\s'-]*$", ErrorMessage = "El apellido solo puede contener letras")]
+            [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]*$", 
+            ErrorMessage = "El apellido solo puede contener letras y caracteres latinos")]
             public string Lastname { get; set; }
 
             [Required]
@@ -31,8 +33,8 @@ namespace Medicare.Presentation.Models.Users
 
             [Required(ErrorMessage = "La contraseña es requerida")]
             [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres")]
-            [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
-                ErrorMessage = "La contraseña debe tener al menos una minúscula, una mayúscula, dos números y un caracter especial")]
+            [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d.*\d)(?=.*[\W_])[a-zA-Z\d\W_]{8,}$",
+            ErrorMessage = "La contraseña debe tener al menos una minúscula, una mayúscula, dos números y un caracter especial")]
             public string Password { get; set; }
 
             [Required(ErrorMessage = "La confirmación de la contraseña es requerida")]
@@ -47,7 +49,7 @@ namespace Medicare.Presentation.Models.Users
                 if (Password != ConfirmPassword) yield return new ValidationResult("Las contraseñas no coinciden", new[] { nameof(Password), nameof(ConfirmPassword) });
             }
 
-        public bool IsRegisterUserViewModelValid()
+      /*  public bool IsRegisterUserViewModelValid()
         {
             return Validate(new ValidationContext(this))
                 .Where(v => v.MemberNames.Contains(nameof(Name)) ||
@@ -58,6 +60,6 @@ namespace Medicare.Presentation.Models.Users
                             v.MemberNames.Contains(nameof(ConfirmPassword)) ||
                             v.MemberNames.Contains(nameof(RoleId)))
                 .Count() == 0;
-        }
+        }*/
     }
 }

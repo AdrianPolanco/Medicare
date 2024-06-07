@@ -34,50 +34,37 @@ namespace Medicare.Presentation.Controllers
         public async Task<IActionResult> Index(int? page, string search, UserFilterOptions? option, CancellationToken cancellationToken)
         {
             page = page ?? 1;
-
-         
-            var recoveredRoles = await _roleService.GetByPagesAsync(1, cancellationToken);
-            UserSessionInfo userSessionInfo = _sessionService.GetSession(UserSessionInfo.UserSessionKey);
+            UserSessionInfo userSessionInfo = _sessionService.GetSession();
             Expression<Func<User, bool>> searchFilter = FilterHelper.GetUserFilter(option, search, userSessionInfo.OfficeId);
-            User user = await _userService.GetByIdAsync(userSessionInfo.UserId, cancellationToken);
             ICollection<User> recoveredUsers = await _userService.GetByPagesAsync((int)page, cancellationToken, searchFilter);
             List<User> users = recoveredUsers.ToList();
             UsersMenuViewModel usersMenuViewModel = new UsersMenuViewModel { 
                 Users = users, 
                 Admins = UserFilterOptions.Admins, 
-                Pages = (int)page,
-                CurrentUser = user, Roles = recoveredRoles.ToList() };
+                Pages = (int)page 
+            };
             return View(usersMenuViewModel);
         }
 
         public async Task<IActionResult> CreateNewUser(CancellationToken cancellationToken)
         {
-            UserSessionInfo userSessionInfo = _sessionService.GetSession(UserSessionInfo.UserSessionKey);
-            User user = await _userService.GetByIdAsync(userSessionInfo.UserId, cancellationToken);
-            ICollection<Role> rolesCollection = await _roleService.GetByPagesAsync(1, cancellationToken);
-            List<Role> roles = rolesCollection.ToList();
-
-            RegisterUserFromAdminUserViewModel registerUserFromAdminUserViewModel
-                = new RegisterUserFromAdminUserViewModel { CurrentUser = user, Roles = roles };
-
-            return View(registerUserFromAdminUserViewModel);
+            return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> SaveNewUser(RegisterUserFromAdminUserViewModel registerUserFromAdminUserViewModel, CancellationToken cancellationToken)
         {
-              if (!registerUserFromAdminUserViewModel.IsRegisterUserViewModelValid())
+            User currentUser = await _sessionService.GetCurrentUser();
+            ICollection<Role> rolesCollection = await _roleService.GetByPagesAsync(1, cancellationToken);
+
+            User? userExists = await _userService.UserExists(registerUserFromAdminUserViewModel.Username, cancellationToken);
+            if(userExists is not null)
+            {
+                ModelState.AddModelError("Username", "El nombre de usuario ya existe");
+                return View("CreateNewUser", registerUserFromAdminUserViewModel);
+            }
+              if (!ModelState.IsValid)
               {
-                ICollection<Role> rolesCollection = await _roleService.GetByPagesAsync(1, cancellationToken);
-
-                  List<Role> roles = rolesCollection.ToList();
-                  registerUserFromAdminUserViewModel.Roles = roles;
-
-                  UserSessionInfo userSessionInfo = _sessionService.GetSession(UserSessionInfo.UserSessionKey);
-                  User currentUser = await _userService.GetByIdAsync(userSessionInfo.UserId, cancellationToken);
-
-                  registerUserFromAdminUserViewModel.CurrentUser = currentUser;
-
                   return View("CreateNewUser", registerUserFromAdminUserViewModel);
               }
 
@@ -89,12 +76,31 @@ namespace Medicare.Presentation.Controllers
                   Email = registerUserFromAdminUserViewModel.Email,
                   Password = registerUserFromAdminUserViewModel.Password,
                   RoleId = registerUserFromAdminUserViewModel.RoleId,
-                  OfficeId = registerUserFromAdminUserViewModel.CurrentUser.OfficeId
+                  OfficeId = currentUser.OfficeId
               };
 
               await _registerUserFromAdminAccountUseCase.ExecuteAsync(user, cancellationToken);
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> EditUser(Guid id, CancellationToken cancellationToken)
+        {
+            UserSessionInfo userSessionInfo = _sessionService.GetSession();
+            User userToEdit = await _userService.GetByIdAsync(id, cancellationToken);
+            ICollection<Role> rolesCollection = await _roleService.GetByPagesAsync(1, cancellationToken);
+
+            UpdateUserFromAdminViewModel updateUserFromAdminUserViewModel = new UpdateUserFromAdminViewModel
+            {
+                Id = userToEdit.Id,
+                Name = userToEdit.Name,
+                Lastname = userToEdit.Lastname,
+                Username = userToEdit.Username,
+                Email = userToEdit.Email,
+                OfficeName = userToEdit.Office.Name,
+            };
+
+            return View(updateUserFromAdminUserViewModel);
         }
     }
 }

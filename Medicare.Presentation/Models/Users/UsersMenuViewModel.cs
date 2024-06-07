@@ -3,7 +3,7 @@ using Medicare.Domain.Entities;
 
 namespace Medicare.Presentation.Models.Users
 {
-    public class UsersMenuViewModel: AuthenticatedViewModel
+    public class UsersMenuViewModel
     {
         public UserFilterOptions All = UserFilterOptions.All;
         public UserFilterOptions Admins = UserFilterOptions.Admins;

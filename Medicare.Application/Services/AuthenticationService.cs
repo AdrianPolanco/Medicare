@@ -33,7 +33,9 @@ namespace Medicare.Application.Services
 
 			bool isValidPassword = _passwordManager.VerifyPassword(password, existingUser.Password);
 
-			if(isValidPassword) _user = existingUser;
+			if (isValidPassword) { 
+				_user = await _userService.GetByIdAsync(existingUser.Id, cancellationToken);
+			} 
 
 			return isValidPassword;
 		}

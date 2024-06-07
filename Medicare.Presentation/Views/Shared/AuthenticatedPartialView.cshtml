@@ -1,7 +1,10 @@
-﻿@using Medicare.Presentation.Models.Users
-@model AuthenticatedViewModel;
-
-
+﻿@using Medicare.Application.Services.Interfaces
+@using Medicare.Domain.Entities
+@using Medicare.Presentation.Models.Users
+@inject ISessionService _sessionService;
+@{
+    User currentUser = await _sessionService.GetCurrentUser();
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +36,7 @@
 
             <div class="sm:mb-0 self-center">        
                 <ul class="flex gap-x-4">
-                @if (Model.CurrentUser.Role.Name == "Administrador")
+                @if (currentUser.Role.Name == "Administrador")
                 {
                        <li> 
                            <a asp-controller="Admin" asp-action="CreateNewUser" class="inline-flex items-center gap-x-2 rounded-md px-3.5 py-2.5 text-sm font-semibold text-teal-300 hover:underline hover:decoration-teal-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600">
@@ -80,7 +83,7 @@
                     }
                     <li class="flex font-semibold text-sm items-center gap-x-1">
                         <i class="fa-solid fa-circle-user"></i>
-                        @Model.CurrentUser.Name @Model.CurrentUser.Lastname
+                        @currentUser.Name @currentUser.Lastname
                     </li>
                     <li><form id="logoutForm" method="post" asp-action="Logout" asp-controller="Authenticated">
                         @Html.AntiForgeryToken()

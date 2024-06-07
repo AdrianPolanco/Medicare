@@ -24,7 +24,7 @@ namespace Medicare.Presentation.Controllers
 
 		public IActionResult LogOut()
 		{
-			_sessionService.RemoveSession(UserSessionInfo.UserSessionKey);
+			_sessionService.RemoveSession();
 			return RedirectToAction("Index", "Public");
 		}
 	}

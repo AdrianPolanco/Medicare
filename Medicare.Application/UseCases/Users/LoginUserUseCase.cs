@@ -22,12 +22,13 @@ namespace Medicare.Application.UseCases.Users
 
 			if (authenticatedUser is null) return null;
 
-			_sessionService.SetSession(UserSessionInfo.UserSessionKey, new UserSessionInfo
+			_sessionService.SetSession(new UserSessionInfo
 			{
                 UserId = authenticatedUser.Id,
                 OfficeId = authenticatedUser.OfficeId,
                 RoleId = authenticatedUser.RoleId,
-                OwnsOffice = authenticatedUser.OwnedOfficeId != default
+                OwnsOffice = authenticatedUser.OwnedOfficeId != default,
+				OwnerId = authenticatedUser.Office.OwnerId
             });
 
 			return authenticatedUser;

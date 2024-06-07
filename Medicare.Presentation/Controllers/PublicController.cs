@@ -71,7 +71,6 @@ namespace Medicare.Presentation.Controllers
         {
             if(!ModelState.IsValid) return View(loginViewModel);
 
-
             User userCredentials = new User
             {
                 Username = loginViewModel.Username,

@@ -1,5 +1,6 @@
 ﻿using Medicare.Application.Models;
 using Medicare.Application.Services.Interfaces;
+using Medicare.Domain.Entities;
 using Medicare.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Http;
 
@@ -10,23 +11,32 @@ namespace Medicare.Infrastructure.Services
     {
 
         private readonly IHttpContextAccessor _httpContextAccesor;
-        public SessionService(IHttpContextAccessor httpContextAccessor)
+        private readonly IUserService _userService;
+        public SessionService(IHttpContextAccessor httpContextAccessor, IUserService userService)
         {
             _httpContextAccesor = httpContextAccessor;
-        }
-        public UserSessionInfo GetSession(string key)
-        {
-            return _httpContextAccesor.HttpContext.Session.GetObject<UserSessionInfo>(key);
+            _userService = userService;
         }
 
-        public void RemoveSession(string key)
+        public async Task<User> GetCurrentUser()
         {
-            _httpContextAccesor.HttpContext.Session.Remove(key);
+            UserSessionInfo userSessionInfo = GetSession();
+            return await _userService.GetByIdAsync(userSessionInfo.UserId, new CancellationToken());
         }
 
-        public void SetSession(string key, UserSessionInfo value)
+        public UserSessionInfo GetSession()
         {
-            _httpContextAccesor.HttpContext.Session.SetObject(key, value);
+            return _httpContextAccesor.HttpContext.Session.GetObject<UserSessionInfo>(UserSessionInfo.UserSessionKey);
+        }
+
+        public void RemoveSession()
+        {
+            _httpContextAccesor.HttpContext.Session.Remove(UserSessionInfo.UserSessionKey);
+        }
+
+        public void SetSession(UserSessionInfo value)
+        {
+            _httpContextAccesor.HttpContext.Session.SetObject(UserSessionInfo.UserSessionKey, value);
         }
     }
 }

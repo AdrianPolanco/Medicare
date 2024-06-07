@@ -15,7 +15,7 @@ namespace Medicare.Presentation.Filters
         }
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            UserSessionInfo userSessionInfo = _sessionService.GetSession(UserSessionInfo.UserSessionKey);
+            UserSessionInfo userSessionInfo = _sessionService.GetSession();
 
             if( userSessionInfo != null 
                 && userSessionInfo.UserId != Guid.Empty

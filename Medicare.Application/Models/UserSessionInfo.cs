@@ -9,5 +9,6 @@ namespace Medicare.Application.Models
         public Guid OfficeId { get; set; }
         public Guid RoleId { get; set; }
         public bool OwnsOffice { get; set; }
+        public Guid OwnerId { get; set; }
     }
 }

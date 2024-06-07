@@ -14,7 +14,7 @@ namespace Medicare.Presentation.Filters
         }
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            UserSessionInfo userSession = _sessionService.GetSession(UserSessionInfo.UserSessionKey);
+            UserSessionInfo userSession = _sessionService.GetSession();
 
             if (userSession is null ||
                 userSession.UserId == Guid.Empty ||

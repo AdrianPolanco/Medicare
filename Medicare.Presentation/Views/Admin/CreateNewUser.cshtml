@@ -1,9 +1,15 @@
-﻿@using Medicare.Domain.Entities
+﻿@using Medicare.Application.Services.Interfaces
+@using Medicare.Domain.Entities
 @using Medicare.Presentation.Models.Users
 @model RegisterUserFromAdminUserViewModel;
+@inject ISessionService _sessionService;    
+@inject IRoleService _roleService;
 @{
     ViewData["Title"] = "Sign Up";
     Layout = "~/Views/Shared/AuthenticatedPartialView.cshtml";
+    User currentUser = await _sessionService.GetCurrentUser();
+    ICollection<Role> rolesCollection = await _roleService.GetByPagesAsync(1, new CancellationToken());
+    List<Role> roles = rolesCollection.ToList();
 }
 
 <section class="bg-white">
@@ -68,16 +74,16 @@
                     </div>
                     <div class="flex flex-col gap-x-2 justify-center items-start">
                         <label class="block mb-2 text-sm text-gray-600">Nombre del consultorio</label>
-                        <input type="hidden" asp-for="CurrentUser.OfficeId" />
+                        <input type="hidden" value="currentUser.OfficeId" name="currentOffice"/>
                         <div class="w-1/4 py-1 px-2 bg-teal-300 rounded-md">
-                            <span class="text-white font-semibold">@Model.CurrentUser.Office.Name</span>
+                            <span class="text-white font-semibold">@currentUser.Office.Name</span>
                         </div>
                     </div>
 
                     <div>
                         <label asp-for="RoleId" class="block mb-2 text-sm text-gray-600">Rol</label>
                         <select asp-for="RoleId" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40">
-                            @foreach (Role role in Model.Roles)
+                            @foreach (Role role in roles)
                             {
                                 <option value="@role.Id">@role.Name</option>
                             }
