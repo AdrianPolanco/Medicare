@@ -4,7 +4,7 @@ using Medicare.Domain.Entities.Base;
 
 namespace Medicare.Domain.Entities
 {
-    public class Doctor: Entity
+    public class Doctor: Entity, IEntityWithOffice
     {
         public string Name { get; set; }
         public string Lastname { get; set; }
@@ -13,6 +13,7 @@ namespace Medicare.Domain.Entities
         public string IdentityCard { get; set; }
         public Guid OfficeId { get; set; }
         public Office Office { get; set; }
+        public string ImageRoute { get; set; }
 
     }
 }

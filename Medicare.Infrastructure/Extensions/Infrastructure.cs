@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using Medicare.Application.Services.Interfaces;
+using Medicare.Application.Services;
 
 namespace Medicare.Infrastructure.Extensions
 {
@@ -29,8 +30,11 @@ namespace Medicare.Infrastructure.Extensions
             services.AddSingleton<IPasswordManager, PasswordManager>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
+            services.AddScoped<IDoctorRepository, DoctorRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<ISessionService, SessionService>();
+            services.AddScoped<IFileUploader, FileUploader>();
+
             
             return services;
         }

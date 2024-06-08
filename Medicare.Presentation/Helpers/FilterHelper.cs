@@ -1,5 +1,6 @@
 ﻿using Medicare.Application.Enums;
 using Medicare.Domain.Entities;
+using Medicare.Domain.Entities.Base;
 using System.Linq.Expressions;
 
 namespace Medicare.Presentation.Helpers
@@ -29,6 +30,19 @@ namespace Medicare.Presentation.Helpers
             if (!string.IsNullOrEmpty(searchValue))
             {
                 searchFilter = searchFilter.And(u => u.Name.Contains(searchValue) || u.Lastname.Contains(searchValue) || u.Username.Contains(searchValue));
+            }
+
+            return searchFilter;
+        }
+
+        public static Expression<Func<T, bool>>? GetFilter<T>(string searchValue, Guid officeId) where T: IEntityWithOffice
+        {
+            Expression<Func<T, bool>>? searchFilter = u => true;
+            searchFilter = searchFilter.And(u => u.OfficeId == officeId);
+            // Filtrar por búsqueda
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                searchFilter = searchFilter.And(u => u.ToString().Contains(searchValue));
             }
 
             return searchFilter;

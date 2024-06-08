@@ -15,7 +15,8 @@ namespace Medicare.Infrastructure.Context.Configurations
             builder.Property(d => d.Lastname).HasMaxLength(100).IsRequired();
             builder.Property(d => d.Email).HasMaxLength(100).IsRequired();
             builder.Property(d => d.Phone).HasMaxLength(25).IsRequired();
-            builder.Property(d => d.IdentityCard).HasMaxLength(12);
+            builder.Property(d => d.IdentityCard).HasMaxLength(30);
+            builder.Property(d => d.ImageRoute).HasMaxLength(500);
 
             builder.HasOne(d => d.Office)
                 .WithMany(o => o.Doctors)

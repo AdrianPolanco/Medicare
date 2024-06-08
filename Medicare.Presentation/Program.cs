@@ -2,6 +2,8 @@ using Medicare.Infrastructure.Options;
 using Medicare.Infrastructure.Extensions;
 using Medicare.Application.Extensions;
 using Medicare.Presentation.Filters;
+using Medicare.Application.Adapters;
+using Medicare.Presentation.Adapters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,7 @@ builder.Services.AddScoped<PublicFilter>();
 builder.Services.AddScoped<SessionAuthenticationFilter>();
 builder.Services.AddScoped<AdminAuthorizationFilter>();
 builder.Services.AddScoped<AssistantAuthorizationFilter>();
+builder.Services.AddScoped<IWebHostEnvironmentAdapter, WebHostEnvironmentAdapter>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {

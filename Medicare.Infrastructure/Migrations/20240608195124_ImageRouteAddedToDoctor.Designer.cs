@@ -4,6 +4,7 @@ using Medicare.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Medicare.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240608195124_ImageRouteAddedToDoctor")]
+    partial class ImageRouteAddedToDoctor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,8 +41,8 @@ namespace Medicare.Infrastructure.Migrations
 
                     b.Property<string>("IdentityCard")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<string>("ImageRoute")
                         .IsRequired()
@@ -118,13 +121,13 @@ namespace Medicare.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("bf59c74f-ee68-41c8-a72e-d9f053217b3a"),
+                            Id = new Guid("6d32c5d5-b619-46c0-9d04-764c2844f359"),
                             Deleted = false,
                             Name = "Administrador"
                         },
                         new
                         {
-                            Id = new Guid("a20b5c65-f913-4260-9d1e-c38b7c0e21a6"),
+                            Id = new Guid("0b6e5f31-bfed-4868-ae57-d6096651cc8e"),
                             Deleted = false,
                             Name = "Asistente"
                         });

@@ -102,6 +102,7 @@ namespace Medicare.Presentation.Controllers
                 Username = userToEdit.Username,
                 Email = userToEdit.Email,
                 OfficeName = userToEdit.Office.Name,
+                RoleId = userToEdit.RoleId
             };
 
             return View(updateUserFromAdminUserViewModel);

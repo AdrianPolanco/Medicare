@@ -87,10 +87,17 @@
                     {
                         <div>
                             <label asp-for="RoleId" class="block mb-2 text-sm text-gray-600">Rol</label>
-                            <select asp-for="RoleId" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40">
+                            <select asp-for="RoleId"  class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40">
                                 @foreach (Role role in roles)
                                 {
-                                    <option value="@role.Id">@role.Name</option>
+                                    if(role.Id == Model.RoleId)
+                                    {
+                                        <option value="@role.Id" selected>@role.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@role.Id">@role.Name</option>
+                                    }
                                 }
                             </select>
                         </div>
