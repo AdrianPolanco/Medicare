@@ -133,7 +133,7 @@
                             </button>
                         </form>
                     </div>
-                    <table class="table text-gray-400 border-separate space-y-6 text-sm">
+      <table class="table text-gray-400 border-separate space-y-6 text-sm">
         <thead class="bg-teal-400 text-white">
           <tr>
             <th class="p-3">Nombre</th>
@@ -146,9 +146,12 @@
           </tr>
         </thead>
         <tbody>
+          @if(Model.Users.Count == 0)
+          {
+            <tr class="bg-teal-50"><td class="p-3 text-center" colspan="7">No hay usuarios registrados</td></tr>
+          }else{
            @foreach(User user in Model.Users)
-           {
-              <tr class="bg-teal-50">
+           {<tr class="bg-teal-50">                
                 <td class="p-3 font-medium capitalize">@user.Name</td>
                 <td class="p-3">@user.Lastname</td>
                 <td class="p-3">@user.Email</td>
@@ -169,8 +172,7 @@
                        <i class="fa-solid fa-lock"></i>
                           Propietario
                      </td>
-                   }else if (currentUser.Id != user.Id)
-                   {
+                   }else if (currentUser.Id != user.Id){
                      <td class="p-3">
                           <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id" class="text-teal-400 hover:text-gray-100 mx-2">
                           <i class="fa-solid fa-pen-to-square"></i>
@@ -180,16 +182,16 @@
                           <i class="fa-solid fa-trash"></i>
                        </button>
                      </td>
-                   }else
-                   {
+                   }else{
                       <td class="flex-inline text-center justify-center items-center">
                             <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@user.Id" class="text-teal-400 hover:text-gray-100 mx-2">
                             <i class="fa-solid fa-pen-to-square"></i>
                          </a>
                       </td>
                    }
-                  </tr>
-}
+           </tr>
+                  }         
+            }
         </tbody>
       </table>
     </div>
@@ -263,7 +265,6 @@
         </div>
     </div>
 </div>
-
 <script>
     const modal = document.querySelector('.main-modal');
     const closeButton = document.querySelectorAll('.modal-close');
