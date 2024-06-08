@@ -13,11 +13,12 @@ namespace Medicare.Application.Services.Base
             _repository = repository;     
         }
 
-        public virtual async Task AddAsync(T entity, CancellationToken cancellationToken)
+        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken)
         {
             try
             {
-                await _repository.AddAsync(entity, cancellationToken);
+                T addedEntity = await _repository.AddAsync(entity, cancellationToken);
+                return addedEntity;
             }catch(Exception ex)
             {
                 throw new Exception(ex.Message);

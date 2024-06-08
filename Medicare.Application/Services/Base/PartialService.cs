@@ -11,11 +11,11 @@ namespace Medicare.Application.Services.Base
         protected PartialService(IPartialRepository<T> partialRepository) {
             _partialRepository = partialRepository;
         }
-        public virtual async Task AddAsync(T entity, CancellationToken cancellationToken)
+        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken)
         {
             try
             {
-                await _partialRepository.AddAsync(entity, cancellationToken);
+                return await _partialRepository.AddAsync(entity, cancellationToken);
             }catch(Exception ex)
             {
                 throw new Exception(ex.Message);

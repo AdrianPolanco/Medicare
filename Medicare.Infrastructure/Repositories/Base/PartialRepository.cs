@@ -17,7 +17,7 @@ namespace Medicare.Infrastructure.Repositories.Base
             _context = context;
         }
 
-        public virtual async Task AddAsync(T entity, CancellationToken cancellationToken)
+        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken)
         {
             var transaction = await BeginTransactionAsync(cancellationToken);
             { 
@@ -26,6 +26,7 @@ namespace Medicare.Infrastructure.Repositories.Base
                     await _dbSet.AddAsync(entity, cancellationToken);
                     await SaveChangesAsync(cancellationToken);
                     await CommitAsync(cancellationToken);
+                    return entity;
                 }
                 catch (Exception ex)
                 {
