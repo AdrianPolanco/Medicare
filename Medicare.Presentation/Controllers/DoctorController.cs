@@ -22,7 +22,7 @@ namespace Medicare.Presentation.Controllers
         public async Task<IActionResult> SaveNewDoctor(CreateDoctorViewModel doctorViewModel, CancellationToken cancellationToken)
         {
             if(!ModelState.IsValid)
-                return View(doctorViewModel);
+                return View("CreateNewDoctor", doctorViewModel);
 
             return View("Index");
         }   

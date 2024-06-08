@@ -20,10 +20,8 @@ namespace Medicare.Presentation.Models.Doctors
             public string Lastname { get; set; }
 
             [Required]
-            [MinLength(3, ErrorMessage = "El apellido debe tener al menos 3 caracteres")]
-            [MaxLength(100, ErrorMessage = "El apellido no puede tener más de 100 caracteres")]
-            [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]*$",
-             ErrorMessage = "El apellido solo puede contener letras y caracteres latinos")]
+            [RegularExpression(@"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", ErrorMessage = "El email no es válido")]
+            [MaxLength(100, ErrorMessage = "El email no puede tener más de 100 caracteres")]
             public string Email { get; set; }
 
             [Required]
@@ -39,6 +37,6 @@ namespace Medicare.Presentation.Models.Doctors
             public Guid OfficeId { get; set; }
 
             [DataType(DataType.Upload)]
-            public IFormFile Image { get; set; }
+            public IFormFile? Image { get; set; }
     }
 }
