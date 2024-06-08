@@ -1,4 +1,5 @@
 ﻿using Medicare.Presentation.Filters;
+using Medicare.Presentation.Models.Doctors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Medicare.Presentation.Controllers
@@ -11,5 +12,19 @@ namespace Medicare.Presentation.Controllers
         {
             return View();
         }
+
+
+        public IActionResult CreateNewDoctor()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> SaveNewDoctor(CreateDoctorViewModel doctorViewModel, CancellationToken cancellationToken)
+        {
+            if(!ModelState.IsValid)
+                return View(doctorViewModel);
+
+            return View("Index");
+        }   
     }
 }
