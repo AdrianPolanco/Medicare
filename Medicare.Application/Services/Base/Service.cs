@@ -1,5 +1,6 @@
 ﻿using Medicare.Application.Services.Interfaces.Base;
 using Medicare.Domain.Entities.Base;
+using Medicare.Domain.Repositories;
 using Medicare.Domain.Repositories.Base;
 using System.Linq.Expressions;
 
@@ -62,7 +63,9 @@ namespace Medicare.Application.Services.Base
         {
             try
             {
-                return await _repository.GetRowsCountAsync(cancellationToken);
+                int rows = await _repository.GetRowsCountAsync(cancellationToken);
+                double pages = Math.Ceiling(rows / 10.0);
+                return (int)pages;
             }
             catch (Exception ex)
             {

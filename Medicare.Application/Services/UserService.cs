@@ -26,12 +26,5 @@ namespace Medicare.Application.Services
         {
             return await ((IUserRepository)_repository).UserExists(name, cancellationToken);
         }
-
-        public override async Task<int> GetRowsCountAsync(CancellationToken cancellationToken)
-        {
-            int rows = await ((IUserRepository)_repository).GetRowsCountAsync(cancellationToken);
-            double pages = Math.Ceiling(rows / 10.0);
-            return (int)pages;
-        }
     }
 }

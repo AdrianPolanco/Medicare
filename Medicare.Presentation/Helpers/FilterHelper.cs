@@ -35,14 +35,14 @@ namespace Medicare.Presentation.Helpers
             return searchFilter;
         }
 
-        public static Expression<Func<T, bool>>? GetFilter<T>(string searchValue, Guid officeId) where T: IEntityWithOffice
+        public static Expression<Func<Doctor, bool>>? GetDoctorFilter(string searchValue, Guid officeId)
         {
-            Expression<Func<T, bool>>? searchFilter = u => true;
-            searchFilter = searchFilter.And(u => u.OfficeId == officeId);
+            Expression<Func<Doctor, bool>>? searchFilter = d => true;
+            searchFilter = searchFilter.And(d => d.OfficeId == officeId);
             // Filtrar por búsqueda
             if (!string.IsNullOrEmpty(searchValue))
             {
-                searchFilter = searchFilter.And(u => u.ToString().Contains(searchValue));
+                searchFilter = searchFilter.And(d => d.Name.Contains(searchValue) || d.Lastname.Contains(searchValue) || d.Email.Contains(searchValue));
             }
 
             return searchFilter;

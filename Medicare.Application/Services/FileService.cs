@@ -1,14 +1,10 @@
-﻿
-
-using Medicare.Application.Adapters;
-using Medicare.Domain.Entities.Base;
+﻿using Medicare.Domain.Entities.Base;
 
 namespace Medicare.Application.Services
 {
     public class FileService<T> : IFileService<T> where T : Entity
     {
         private readonly IFileUploader _fileUploader;
-        private readonly IWebHostEnvironmentAdapter _webHostEnvironmentAdapter;  
         private readonly string _folder;
         private readonly string _baseFolder;
 

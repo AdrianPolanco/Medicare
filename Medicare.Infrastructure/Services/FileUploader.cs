@@ -1,5 +1,4 @@
-﻿
-using Medicare.Application.Adapters;
+﻿using Medicare.Application.Adapters;
 using Medicare.Application.Services;
 
 namespace Medicare.Infrastructure.Services

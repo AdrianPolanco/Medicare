@@ -31,7 +31,7 @@ namespace Medicare.Presentation.Controllers
         {
             page = page ?? 1;
             UserSessionInfo userSessionInfo = _sessionService.GetSession();
-            Expression<Func<Doctor, bool>> searchFilter = FilterHelper.GetFilter<Doctor>(search, userSessionInfo.OfficeId);
+            Expression<Func<Doctor, bool>> searchFilter = FilterHelper.GetDoctorFilter(search, userSessionInfo.OfficeId);
             ICollection<Doctor> recoveredDoctors = await _doctorService.GetByPagesAsync((int)page, cancellationToken, searchFilter);
             List<Doctor> doctors = recoveredDoctors.ToList();
             int pages = await _doctorService.GetRowsCountAsync(cancellationToken);
