@@ -204,7 +204,7 @@
             </div>
             <!--Body-->
             <div class="my-5">
-                <p>¿Esta seguro que desea eliminar este usuario?</p>
+                <p>¿Esta seguro que desea eliminar este doctor?</p>
             </div>
             <!--Footer-->
             <div class="flex justify-end pt-2">
@@ -212,8 +212,8 @@
                     Cancelar
                 </button>
                 <form asp-controller="Doctor" asp-action="DeleteDoctor">
-                    <input type="hidden" id="userIdToDelete" name="userId" />
-                    <button type="submit" class="focus:outline-none px-4 bg-red-500 p-3 ml-3 rounded-lg text-white hover:bg-red-400">Eliminar usuario</button>
+                    <input type="hidden" id="doctorIdToDelete" name="doctorId" />
+                    <button type="submit" class="focus:outline-none px-4 bg-red-500 p-3 ml-3 rounded-lg text-white hover:bg-red-400">Eliminar doctor</button>
                 </form>
             </div>
         </div>
@@ -232,7 +232,7 @@
     }
 
     const openModal = (userId) => {
-        document.getElementById('userIdToDelete').value = userId;
+        document.getElementById('doctorIdToDelete').value = userId;
         modal.classList.remove('fadeOut');
         modal.classList.add('fadeIn');
         modal.style.display = 'flex';
