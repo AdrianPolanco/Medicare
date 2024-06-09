@@ -32,6 +32,7 @@ namespace Medicare.Infrastructure.Extensions
             services.AddScoped<IOfficeRepository, OfficeRepository>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<ILabTestRepository, LabTestRepository>();
             services.AddScoped<ISessionService, SessionService>();
             services.AddScoped<IFileUploader, FileUploader>();
 

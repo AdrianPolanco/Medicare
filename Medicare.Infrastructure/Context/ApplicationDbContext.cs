@@ -14,6 +14,7 @@ namespace Medicare.Infrastructure.Context
         public DbSet<Office> Offices { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<LabTest> LabTests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,6 +22,7 @@ namespace Medicare.Infrastructure.Context
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new OfficeConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorConfiguration());
+            modelBuilder.ApplyConfiguration(new LabTestConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
