@@ -48,6 +48,19 @@ namespace Medicare.Presentation.Helpers
             return searchFilter;
         }
 
+        public static Expression<Func<LabTest, bool>>? GetLabTestFilter(string searchValue, Guid officeId)
+        {
+            Expression<Func<LabTest, bool>>? searchFilter = lt => true;
+            searchFilter = searchFilter.And(lt => lt.OfficeId == officeId);
+            // Filtrar por búsqueda
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                searchFilter = searchFilter.And(lt => lt.Name.Contains(searchValue));
+            }
+
+            return searchFilter;
+        }
+
         public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
         {
             var parameter = Expression.Parameter(typeof(T));

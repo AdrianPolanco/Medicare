@@ -1,0 +1,42 @@
+﻿@using Medicare.Application.Services.Interfaces
+@using Medicare.Presentation.Models.LabTests
+@model UpdateLabTestViewModel
+@inject ISessionService sessionService;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AuthenticatedPartialView.cshtml";
+    var currentUser = await sessionService.GetCurrentUser();
+}
+
+<section class="flex flex-col gap-3 justify-center items-center">
+
+    <h1 class="text-teal-400 text-center font-semibold text-3xl">Registrar Prueba de Laboratorio</h1>
+
+    <form asp-action="UpdateLabTest" enctype="multipart/form-data" method="post" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="Id" />
+        <div>
+            <label asp-for="Name" class="block mb-2 text-sm text-gray-600">Nombre</label>
+            <input asp-for="Name" type="text" id="name-input" placeholder="John" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" onblur="updateCard()" />
+            <span asp-validation-for="Name" class="text-red-500"></span>
+        </div>
+        <div class="flex flex-col gap-x-2 justify-center items-start">
+            <label class="block mb-2 text-sm text-gray-600">Nombre del consultorio</label>
+            <input type="hidden" value="@currentUser.OfficeId" asp-for="OfficeId" />
+            <div class="w-1/2 py-1 px-2 bg-teal-300 rounded-md text-center">
+                <span class="text-white font-semibold" id="office-name-input">@currentUser.Office.Name</span>
+            </div>
+        </div>
+
+        <a asp-controller="LabTest" asp-action="Index" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="font-semibold">Volver atrás</span>
+        </a>
+        <button type="submit" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-teal-300 rounded-md hover:bg-teal-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+            <span class="font-semibold">Editar prueba</span>
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </form>
+
+    </div>
+</section>

@@ -3,11 +3,12 @@
 @using Medicare.Application.Models
 @using Medicare.Application.Services.Interfaces
 @using Medicare.Domain.Entities
+@using Medicare.Presentation.Models.LabTests
 @using Medicare.Presentation.Models.Users
-@model DoctorsMenuViewModel
+@model LabTestViewModel
 @inject ISessionService _sessionService;
 @{
-    ViewData["Title"] = "Medicare - Médicos";
+    ViewData["Title"] = "Medicare - Pruebas de laboratorio";
     Layout = "~/Views/Shared/AuthenticatedPartialView.cshtml";
     User currentUser = await _sessionService.GetCurrentUser();
     UserSessionInfo userSessionInfo = _sessionService.GetSession();
@@ -27,12 +28,18 @@
         border-radius: 20px;
     }
 
-    tr td:nth-child(n + 7),
-    tr th:nth-child(n + 7) {
+    tr th:nth-child(n + 2) {
         border-radius: 0 0.625rem 0.625rem 0;
     }
 
-    tr td:nth-child(1),
+    tr td:nth-child(n + 2)
+    {
+        border-radius: 0 0.625rem 0.625rem 0;
+    }
+
+    tr td:nth-child(1){
+        border-radius: 0.625rem 0 0 0.625rem;
+    }
     tr th:nth-child(1) {
         border-radius: 0.625rem 0 0 0.625rem;
     }
@@ -80,32 +87,30 @@
     }
 </style>
 
-  
+
 <!-- component -->
-<link
-  href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
-  rel="stylesheet"
-/>
+<link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+      rel="stylesheet" />
 <div class="flex flex-col items-center min-h-screen bg-white">
     <div class="w-full flex justify-center mb-10">
-        <a asp-controller="Doctor" asp-action="CreateNewDoctor" class="inline-flex items-center gap-x-2 bg-teal-400 hover:bg-teal-300 text-white py-1 px-3 sm rounded">
+        <a asp-controller="LabTest" asp-action="CreateNewLabTest" class="inline-flex items-center gap-x-2 bg-teal-400 hover:bg-teal-300 text-white py-1 px-3 sm rounded">
             <i class="fa-solid fa-plus"></i>
-            <p>Nuevo doctor</p>
-            <i class="fa-solid fa-user-doctor"></i>
+            <p>Nueva prueba</p>
+            <i class="fa-solid fa-vial-virus"></i>
         </a>
     </div>
-  <div class="col-span-12">
-    <div class="overflow-auto lg:overflow-visible">
-      <div class="flex lg:justify-between pb-1">
-        <div>
-                    <div class="flex w-full gap-x-2 items-center justify-around">
-                        <form asp-controller="Doctor" asp-action="Index" class="flex gap-x-2" method="post">
+    <div class="col-span-12">
+        <div class="overflow-auto lg:overflow-visible">
+            <div class="flex lg:justify-between pb-1">
+                <div>
+                    <div class="flex w-full gap-x-4 items-center justify-around">
+                        <form asp-controller="LabTest" asp-action="Index" class="flex gap-x-2" method="post">
                             <button class="bg-teal-400 text-white py-1 px-3 sm rounded-full">
                                 Resetear filtro
                                 <i class="fa-solid fa-rotate-right"></i>
                             </button>
                         </form>
-                        <form method="post" asp-controller="Doctor" asp-action="Index" class="flex gap-x-2">
+                        <form asp-controller="LabTest" asp-action="Index" class="flex gap-x-2" method="post">
                             <input type="text"
                                    name="search"
                                    placeholder="Busqueda"
@@ -114,50 +119,43 @@
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
                         </form>
+                      
                     </div>
-      <table class="table text-gray-400 border-separate space-y-6 text-sm">
-        <thead class="bg-teal-400 text-white">
-          <tr>
-            <th class="p-3 text-left"></th>
-            <th class="p-3">Nombre</th>
-            <th class="p-3 text-left">Apellido</th>
-            <th class="p-3 text-left">Email</th>
-            <th class="p-3 text-left">Celular</th>
-            <th class="p-3 text-left">Cedula</th>
-            <th class="p-3 text-left">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          @if(Model.Doctors.Count == 0)
-          {
-            <tr class="bg-teal-50"><td class="p-3 text-center" colspan="7">No hay doctores registrados</td></tr>
-          }else{
-           @foreach(Doctor doctor in Model.Doctors)
-           {<tr class="bg-teal-50">
-
-                                        <td><img class="w-10 h-10 rounded-full" src="@doctor.ImageRoute" alt="Jese image"></td>
-                <td class="p-3 font-medium capitalize">@doctor.Name</td>
-                <td class="p-3">@doctor.Lastname</td>
-                <td class="p-3">@doctor.Email</td>
-                <td class="p-3">@doctor.Phone</td>
-                <td class="p-3">@doctor.IdentityCard</td>
-                <td class="p-3">
-                    <a asp-controller="Doctor" asp-action="EditDoctor" asp-route-id="@doctor.Id" class="text-teal-400 hover:text-gray-100 mx-2">
-                       <i class="fa-solid fa-pen-to-square"></i>
-                    </a>
-                    <button onclick="openModal('@doctor.Id')" class="text-red-400 hover:text-gray-100 ml-2">
-                       <i class="fa-solid fa-trash"></i>
-                    </button>
-                </td>
-           </tr>
-                }         
-            }
-        </tbody>
-      </table>
+                    <table class="table text-gray-400 border-separate space-y-6 text-sm w-full">
+                        <thead class="bg-teal-400 text-white">
+                            <tr>
+                                <th class="p-3">Nombre</th>
+                                <th class="p-3 text-left">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.LabTests.Count == 0)
+                            {
+                                <tr class="bg-teal-50"><td class="p-3 text-center" colspan="7">No hay pruebas de laboratorio registradas</td></tr>
+                            }
+                            else
+                            {
+                                @foreach (LabTest labTest in Model.LabTests)
+                                {
+                                    <tr class="bg-teal-50">
+                                        <td class="p-3 font-medium capitalize">@labTest.Name</td>
+                                        <td class="p-3">
+                                            <a asp-controller="LabTest" asp-action="EditLabTest" asp-route-id="@labTest.Id" class="text-teal-400 hover:text-gray-100 mx-2">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <button onclick="openModal('@labTest.Id')" class="text-red-400 hover:text-gray-100 ml-2">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-</div>
     <nav>
         <ul class="flex">
             @for (int i = 1; i <= Model.Pages; i++)
@@ -165,8 +163,7 @@
                 if (i == Model.CurrentPage)
                 {
                     <li>
-                        <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-tr from-teal-600 to-teal-300 p-0 text-sm text-white shadow-md shadow-teal-400/20 transition duration-150 ease-in-out"
-                         >
+                        <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-tr from-teal-600 to-teal-300 p-0 text-sm text-white shadow-md shadow-teal-400/20 transition duration-150 ease-in-out">
                             @i
                         </a>
                     </li>
@@ -175,11 +172,11 @@
                 {
                     <li>
                         <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
-                           asp-controller="Doctor" asp-action="Index" asp-route-page="@i">
-                           @i
+                           asp-controller="LabTest" asp-action="Index" asp-route-page="@i">
+                            @i
                         </a>
                     </li>
-                }            
+                }
             }
         </ul>
     </nav>
@@ -210,16 +207,16 @@
             </div>
             <!--Body-->
             <div class="my-5">
-                <p>¿Esta seguro que desea eliminar este doctor?</p>
+                <p>¿Esta seguro que desea eliminar esta prueba de laboratorio?</p>
             </div>
             <!--Footer-->
             <div class="flex justify-end pt-2">
                 <button class="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg text-black hover:bg-gray-300">
                     Cancelar
                 </button>
-                <form asp-controller="Doctor" asp-action="DeleteDoctor">
-                    <input type="hidden" id="doctorIdToDelete" name="doctorId" />
-                    <button type="submit" class="focus:outline-none px-4 bg-red-500 p-3 ml-3 rounded-lg text-white hover:bg-red-400">Eliminar doctor</button>
+                <form asp-controller="LabTest" asp-action="DeleteLabTest">
+                    <input type="hidden" id="labTestIdToDelete" name="labTestId" />
+                    <button type="submit" class="focus:outline-none px-4 bg-red-500 p-3 ml-3 rounded-lg text-white hover:bg-red-400">Eliminar prueba</button>
                 </form>
             </div>
         </div>
@@ -238,7 +235,7 @@
     }
 
     const openModal = (userId) => {
-        document.getElementById('doctorIdToDelete').value = userId;
+        document.getElementById('labTestIdToDelete').value = userId;
         modal.classList.remove('fadeOut');
         modal.classList.add('fadeIn');
         modal.style.display = 'flex';

@@ -63,8 +63,7 @@ namespace Medicare.Infrastructure.Repositories
 
                     if (existingDoctor == null)
                     {
-                        // Manejar el caso en que el usuario no se encuentre en la base de datos
-                        throw new Exception($"El usuario con Id {entity.Id} no fue encontrado en la base de datos.");
+                        throw new Exception($"El doctor con Id {entity.Id} no fue encontrado en la base de datos.");
                     }
 
                     existingDoctor.Name = entity.Name;
