@@ -7,9 +7,7 @@ using Medicare.Infrastructure.Helpers;
 using Medicare.Presentation.Filters;
 using Medicare.Presentation.Helpers;
 using Medicare.Presentation.Models.Doctors;
-using Medicare.Presentation.Models.Users;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Options;
 using System.Linq.Expressions;
 
 namespace Medicare.Presentation.Controllers
@@ -20,11 +18,13 @@ namespace Medicare.Presentation.Controllers
     {
         private readonly IRegisterDoctorUseCase _registerDoctorUseCase;
         private readonly IUpdateDoctorUseCase _updateDoctorUseCase;
+        private readonly IDeleteDoctorUseCase _deleteDoctorUseCase;
         private readonly ISessionService _sessionService;
         private readonly IDoctorService _doctorService;
         public DoctorController(
             IRegisterDoctorUseCase registerDoctorUseCase, 
             IUpdateDoctorUseCase updateDoctorUseCase,
+            IDeleteDoctorUseCase deleteDoctorUseCase,
             ISessionService sessionService, 
             IDoctorService doctorService)
         {
@@ -32,6 +32,7 @@ namespace Medicare.Presentation.Controllers
             _updateDoctorUseCase = updateDoctorUseCase;
             _sessionService = sessionService;
             _doctorService = doctorService;
+            _deleteDoctorUseCase = deleteDoctorUseCase;
         }
         public async Task<IActionResult> Index(int? page, string search, CancellationToken cancellationToken)
         {
@@ -140,7 +141,7 @@ namespace Medicare.Presentation.Controllers
 
         public async Task<IActionResult> DeleteDoctor(Guid doctorId, CancellationToken cancellationToken)
         {
-            await _doctorService.DeleteAsync(doctorId, cancellationToken);
+            await _deleteDoctorUseCase.ExecyteAsync(doctorId, cancellationToken);
             return RedirectToAction("Index");
         }
     }

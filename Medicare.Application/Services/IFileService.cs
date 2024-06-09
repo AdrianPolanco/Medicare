@@ -6,5 +6,6 @@ namespace Medicare.Application.Services
     {
         Task<string> UploadImageAsync(Stream fileStream, string fileName, Guid id, CancellationToken cancellationToken);
         string GetDefaultImageRoute();
+        void DeleteFolder(Guid id);
     }
 }

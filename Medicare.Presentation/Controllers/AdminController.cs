@@ -22,11 +22,11 @@ namespace Medicare.Presentation.Controllers
         private readonly IUpdateUserUseCase _updateUserUseCase;
 
         public AdminController(
-            ISessionService sessionService, 
-            IUserService userService, 
+            ISessionService sessionService,
+            IUserService userService,
             IRoleService roleService,
             IRegisterUserFromAdminAccountUseCase registerUserFromAdminAccountUseCase,
-            IUpdateUserUseCase updateUserUseCase
+            IUpdateUserUseCase updateUserUseCase         
             )
         {
             _sessionService = sessionService;
@@ -34,6 +34,7 @@ namespace Medicare.Presentation.Controllers
             _roleService = roleService;
             _registerUserFromAdminAccountUseCase = registerUserFromAdminAccountUseCase;
             _updateUserUseCase = updateUserUseCase;
+          
         }
         public async Task<IActionResult> Index(int? page, string search, UserFilterOptions? option, CancellationToken cancellationToken)
         {

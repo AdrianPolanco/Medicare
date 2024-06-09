@@ -30,6 +30,7 @@ namespace Medicare.Application.Extensions
             services.AddScoped<IRegisterDoctorUseCase, RegisterDoctorUseCase>();
             services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IUpdateDoctorUseCase, UpdateDoctorUseCase>();
+            services.AddScoped<IDeleteDoctorUseCase, DeleteDoctorUseCase>();
 
             return services;
         }
