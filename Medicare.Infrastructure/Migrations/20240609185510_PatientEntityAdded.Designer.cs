@@ -4,6 +4,7 @@ using Medicare.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Medicare.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240609185510_PatientEntityAdded")]
+    partial class PatientEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,9 +162,6 @@ namespace Medicare.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("OfficeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -172,8 +172,6 @@ namespace Medicare.Infrastructure.Migrations
                         .HasColumnType("nvarchar(300)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OfficeId");
 
                     b.ToTable("Patients");
                 });
@@ -201,13 +199,13 @@ namespace Medicare.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0a8f9753-537c-43e2-bc8e-82a7ae084627"),
+                            Id = new Guid("2fa5205a-6c71-44f3-9f11-1f460f59895a"),
                             Deleted = false,
                             Name = "Administrador"
                         },
                         new
                         {
-                            Id = new Guid("86fdb1ec-4813-4e65-8f24-3c36d19a3a24"),
+                            Id = new Guid("c689156c-6fec-4f8f-b882-38a33592d105"),
                             Deleted = false,
                             Name = "Asistente"
                         });
@@ -293,17 +291,6 @@ namespace Medicare.Infrastructure.Migrations
                     b.Navigation("Office");
                 });
 
-            modelBuilder.Entity("Medicare.Domain.Entities.Patient", b =>
-                {
-                    b.HasOne("Medicare.Domain.Entities.Office", "Office")
-                        .WithMany("Patients")
-                        .HasForeignKey("OfficeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Office");
-                });
-
             modelBuilder.Entity("Medicare.Domain.Entities.User", b =>
                 {
                     b.HasOne("Medicare.Domain.Entities.Office", "Office")
@@ -337,8 +324,6 @@ namespace Medicare.Infrastructure.Migrations
 
                     b.Navigation("Owner")
                         .IsRequired();
-
-                    b.Navigation("Patients");
 
                     b.Navigation("Users");
                 });
