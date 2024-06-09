@@ -9,5 +9,6 @@ namespace Medicare.Domain.Entities
         public User Owner { get; set; }
         public ICollection<User> Users { get; set; }
         public ICollection<Doctor> Doctors { get; set; }
+        public ICollection<LabTest> LabTests { get; set; }
     }
 }

@@ -13,12 +13,9 @@ namespace Medicare.Infrastructure.Context.Configurations
             builder.HasKey(lt => lt.Id);
             builder.Property(lt => lt.Name).HasMaxLength(100).IsRequired();
 
-            builder.HasData(
-                new LabTest { Id = Guid.NewGuid(), Name = "Blood Test"},
-                new LabTest { Id = Guid.NewGuid(), Name = "Urine Test"},
-                new LabTest { Id = Guid.NewGuid(), Name = "X-Ray"},
-                new LabTest { Id = Guid.NewGuid(), Name = "MRI"},
-                new LabTest { Id = Guid.NewGuid(), Name = "CT Scan"});
+            builder.HasOne(lt => lt.Office)
+                .WithMany(o => o.LabTests)
+                .HasForeignKey(lt => lt.OfficeId);
 
             builder.HasQueryFilter(lt => !lt.Deleted);
         }
