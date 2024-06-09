@@ -1,7 +1,7 @@
 ﻿
 
 using Medicare.Application.Services.Interfaces;
-using Medicare.Application.UseCases.Interfaces;
+using Medicare.Application.UseCases.Users.Interfaces;
 using Medicare.Domain.Entities;
 using Medicare.Domain.Helpers;
 

@@ -1,7 +1,6 @@
-﻿
-using Medicare.Domain.Entities;
+﻿using Medicare.Domain.Entities;
 
-namespace Medicare.Application.UseCases.Interfaces
+namespace Medicare.Application.UseCases.Doctors.Interfaces
 {
     public interface IRegisterDoctorUseCase
     {

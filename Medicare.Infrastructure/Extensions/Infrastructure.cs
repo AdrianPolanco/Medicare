@@ -20,23 +20,33 @@ namespace Medicare.Infrastructure.Extensions
     {
         public static IServiceCollection AddInfrastructureLayer(this IServiceCollection services, InfrastuctureOptions infrastructureOptions)
         {
+            //DbContext
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(infrastructureOptions.Database);
             });
+            
+            //Repositorios genericos
             services.AddScoped<IReadOnlyRepository<Role>, RoleRepository>();
             services.AddScoped<IPartialRepository<Office>, OfficeRepository>();
             services.AddScoped<IRepository<User>, UserRepository>();
-            services.AddSingleton<IPasswordManager, PasswordManager>();
+
+
+            
+            //Repositorios concretos
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
             services.AddScoped<IDoctorRepository, DoctorRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<ILabTestRepository, LabTestRepository>();
+            services.AddScoped<IPatientRepository, PatientRepository>();
+
+            //Servicios de infraestructura
             services.AddScoped<ISessionService, SessionService>();
             services.AddScoped<IFileUploader, FileUploader>();
+            services.AddSingleton<IPasswordManager, PasswordManager>();
 
-            
+
             return services;
         }
 

@@ -1,6 +1,5 @@
 ﻿using Medicare.Application.Services.Interfaces.Base;
 using Medicare.Domain.Entities.Base;
-using Medicare.Domain.Repositories;
 using Medicare.Domain.Repositories.Base;
 using System.Linq.Expressions;
 

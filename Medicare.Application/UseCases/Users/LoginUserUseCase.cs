@@ -1,11 +1,11 @@
 ﻿using Medicare.Application.Models;
 using Medicare.Application.Services.Interfaces;
-using Medicare.Application.UseCases.Interfaces;
+using Medicare.Application.UseCases.Users.Interfaces;
 using Medicare.Domain.Entities;
 
 namespace Medicare.Application.UseCases.Users
 {
-	public class LoginUserUseCase : ILoginUserUseCase
+    public class LoginUserUseCase : ILoginUserUseCase
 	{
 		private readonly IAuthenticationService _authenticationService;
 		private readonly ISessionService _sessionService;

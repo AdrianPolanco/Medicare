@@ -1,6 +1,6 @@
 ﻿using Medicare.Application.Services;
 using Medicare.Application.Services.Interfaces;
-using Medicare.Application.UseCases.Interfaces;
+using Medicare.Application.UseCases.Users.Interfaces;
 using Medicare.Domain.Entities;
 
 namespace Medicare.Application.UseCases.Doctors

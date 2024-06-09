@@ -1,7 +1,8 @@
 ﻿using Medicare.Application.Enums;
 using Medicare.Application.Models;
 using Medicare.Application.Services.Interfaces;
-using Medicare.Application.UseCases.Interfaces;
+using Medicare.Application.UseCases.Doctors.Interfaces;
+using Medicare.Application.UseCases.Users.Interfaces;
 using Medicare.Domain.Entities;
 using Medicare.Infrastructure.Helpers;
 using Medicare.Presentation.Filters;

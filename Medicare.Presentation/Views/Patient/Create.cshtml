@@ -1,0 +1,161 @@
+﻿@using Medicare.Application.Services.Interfaces
+@using Medicare.Presentation.Models.Doctors
+@using Medicare.Presentation.Models.Users
+@model CreatePatientViewModel
+@inject IOfficeService officeService;
+@inject ISessionService sessionService;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AuthenticatedPartialView.cshtml";
+    var currentUser = await sessionService.GetCurrentUser();
+    var office = await officeService.GetByIdAsync(currentUser.OfficeId, new CancellationToken());
+}
+
+<section class="flex flex-col gap-3">
+
+    <h1 class="text-teal-400 text-center font-semibold text-3xl">Registrar Doctor</h1>
+    <div class="flex items-center justify-center gap-x-10 p-10">
+        <div class="flex flex-col items-center p-10 border border-1 rounded p-10">
+            <div class="flex flex-col items-center p-10 border border-1 rounded p-10">
+                <img class="w-60 h-60 mb-3 rounded" src="~/images/user-default.png" id="imageCard" />
+                <h5 class="mb-1 text-xl font-medium text-dark" id="nameCard"></h5>
+                <div class="flex gap-x-1">
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Dirección: </span>
+                    <span class="text-sm text-gray-500 font-semibold" id="addressCard"></span>
+                </div>
+                <div class="flex gap-x-1">
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Telefono: </span>
+                    <span class="text-sm text-gray-500 font-semibold" id="phoneCard"></span>
+                </div>
+                <div class="flex gap-x-1">
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Cedula: </span>
+                    <span class="text-sm text-gray-500 font-semibold" id="idCard"></span>
+                </div>
+                <div class="flex gap-x-1">
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Fecha de nacimiento: </span>
+                    <span class="text-sm text-gray-500 font-semibold" id="birthDateCard"></span>
+                </div>
+                <div class="flex gap-x-1">
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Alergias: </span>
+                    <span class="text-sm text-gray-500 font-semibold" id="allergyCard"></span>
+                </div>
+                <div class="flex gap-x-1">
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Fumador: </span>
+                    <span class="text-sm text-gray-500 font-semibold" id="smokerCard"></span>
+                </div>
+                <div class="flex gap-x-1">
+                    <span class="text-sm text-gray-500 dark:text-gray-400">Consultorio: </span>
+                    <span class="text-sm text-teal-400 font-semibold">@office.Name</span>
+                </div>
+            </div>
+        <form asp-action="SaveNewPatient" enctype="multipart/form-data" method="post" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
+            @Html.AntiForgeryToken()
+            <div>
+                <label asp-for="Name" class="block mb-2 text-sm text-gray-600">Nombre</label>
+                <input asp-for="Name" type="text" id="name-input" placeholder="John" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" onblur="updateCard()" />
+                <span asp-validation-for="Name" class="text-red-500"></span>
+            </div>
+
+            <div>
+                <label asp-for="Lastname" class="block mb-2 text-sm text-gray-600">Apellido</label>
+                <input asp-for="Lastname" type="text" id="lastname-input" placeholder="Snow" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" onblur="updateCard()" />
+                <span asp-validation-for="Lastname" class="text-red-500"></span>
+            </div>
+
+            <div>
+                <label asp-for="PhoneNumber" class="block mb-2 text-sm text-gray-600">Celular: </label>
+                <input asp-for="PhoneNumber" type="text" id="phone-input" placeholder="829 584 8293" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" onblur="updateCard()" />
+                <span asp-validation-for="PhoneNumber" class="text-red-500"></span>
+            </div>
+
+            <div>
+                <label asp-for="Address" class="block mb-2 text-sm text-gray-600">Direccion</label>
+                <input asp-for="Address" type="text" id="email-input" placeholder="johnsnow@example.com" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" onblur="updateCard()" />
+                <span asp-validation-for="Address" class="text-red-500"></span>
+            </div>
+
+            <div>
+                <label asp-for="IdentityCard" class="block mb-2 text-sm text-gray-600">Cedula</label>
+                <input asp-for="IdentityCard" type="text" id="id-input" placeholder="402-5874874-9" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" onblur="updateCard()" />
+                <span asp-validation-for="IdentityCard" class="text-red-500"></span>
+            </div>
+            <div>
+                <label asp-for="BirthDate" class="block mb-2 text-sm text-gray-600">Fecha de nacimiento</label>
+                <input asp-for="BirthDate" type="date" id="birthDate-input" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" onchange="updateCard()" />
+                <span asp-validation-for="BirthDate" class="text-red-500"></span>
+            </div>
+            <div class="flex flex-col gap-x-2 justify-center items-start">
+                <label class="block mb-2 text-sm text-gray-600">Nombre del consultorio</label>
+                <input type="hidden" value="@currentUser.OfficeId" asp-for="OfficeId" />
+                <div class="w-1/2 py-1 px-2 bg-teal-300 rounded-md text-center">
+                    <span class="text-white font-semibold" id="office-name-input">@office.Name</span>
+                </div>
+            </div>
+                <div class="flex gap-x-4">
+                    <div>
+                        <label asp-for="IsSmoker" class="block mb-2 text-sm text-gray-600">Fumador</label>
+                        <select asp-for="IsSmoker" onchange="updateCard()" id="smoker-input">
+                            <option value="true">Si</option>
+                            <option value="false" selected>No</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label asp-for="HasAllergy" class="block mb-2 text-sm text-gray-600">Alergias</label>
+                        <select asp-for="HasAllergy" onchange="updateCard()" id="allergy-input">
+                            <option value="true">Si</option>
+                            <option value="false" selected>No</option>
+                        </select>
+                    </div>
+                </div>
+                
+            <div class="col-span-full md:col-span-2 flex items-center justify-center w-full bg-white">
+                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 bg-white hover:bg-gray-100 dark:border-gray-200 dark:hover:border-gray-500 hover:bg-gray-50">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                        </svg>
+                        <p class="mb-2 text-sm text-gray-500 text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                        <p class="text-xs text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                    </div>
+                    <input id="dropzone-file" type="file" class="hidden" onchange="previewImage(event)" asp-for="Image">
+                </label>
+            </div>
+
+
+            <a asp-controller="Doctor" asp-action="Index" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span class="font-semibold">Volver atrás</span>
+            </a>
+            <button type="submit" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-teal-300 rounded-md hover:bg-teal-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                <span class="font-semibold">Registrar doctor</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </form>
+
+    </div>
+</section>
+<script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function () {
+            const previewImg = document.querySelector('#imageCard');
+            previewImg.src = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function updateCard() {
+        document.getElementById('nameCard').textContent = `${document.querySelector('#name-input').value} ${document.querySelector('#lastname-input').value}`;
+        document.getElementById('emailCard').textContent = document.querySelector('#email-input').value;
+        document.getElementById('phoneCard').textContent = document.querySelector('#phone-input').value;
+        document.getElementById('idCard').textContent = document.querySelector('#id-input').value;
+        document.getElementById('birthDateCard').textContent = document.querySelector('#birthDate-input').value;
+        document.getElementById('allergyCard').textContent = document.querySelector('#allergy-input').value == true ? "Sí" : "No";
+        document.getElementById('smokerCard').textContent = document.querySelector('#smoker-input').value == true ? "Sí" : "No";
+    }
+</script>

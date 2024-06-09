@@ -1,6 +1,4 @@
-﻿
-
-namespace Medicare.Application.UseCases.Interfaces
+﻿namespace Medicare.Application.UseCases.Users.Interfaces
 {
     public interface IDeleteDoctorUseCase
     {

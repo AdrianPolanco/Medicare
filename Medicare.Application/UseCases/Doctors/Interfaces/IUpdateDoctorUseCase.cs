@@ -1,6 +1,6 @@
 ﻿using Medicare.Domain.Entities;
 
-namespace Medicare.Application.UseCases.Interfaces
+namespace Medicare.Application.UseCases.Doctors.Interfaces
 {
     public interface IUpdateDoctorUseCase
     {
