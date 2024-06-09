@@ -1,7 +1,7 @@
 ﻿using Medicare.Presentation.Filters.Attributes;
 using System.ComponentModel.DataAnnotations;
 
-namespace Medicare.Presentation.Models.Users
+namespace Medicare.Presentation.Models.Patients
 {
     public class CreatePatientViewModel
     {

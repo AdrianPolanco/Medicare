@@ -61,6 +61,19 @@ namespace Medicare.Presentation.Helpers
             return searchFilter;
         }
 
+        public static Expression<Func<Patient, bool>>? GetPatientFilter(string searchValue, Guid officeId)
+        {
+            Expression<Func<Patient, bool>>? searchFilter = p => true;
+            searchFilter = searchFilter.And(p => p.OfficeId == officeId);
+            // Filtrar por búsqueda
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                searchFilter = searchFilter.And(p => p.Name.Contains(searchValue) || p.Lastname.Contains(searchValue) || p.IdentityCard.Contains(searchValue));
+            }
+
+            return searchFilter;
+        }
+
         public static Expression<Func<T, bool>> And<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right)
         {
             var parameter = Expression.Parameter(typeof(T));

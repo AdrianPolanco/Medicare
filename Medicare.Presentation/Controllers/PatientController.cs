@@ -1,10 +1,15 @@
-﻿using Medicare.Application.UseCases.Patients.Interfaces;
+﻿using Medicare.Application.Models;
+using Medicare.Application.Services.Interfaces;
+using Medicare.Application.UseCases.Patients.Interfaces;
 using Medicare.Domain.Entities;
 using Medicare.Infrastructure.Helpers;
 using Medicare.Presentation.Filters;
+using Medicare.Presentation.Helpers;
 using Medicare.Presentation.Models.Doctors;
-using Medicare.Presentation.Models.Users;
+using Medicare.Presentation.Models.Patients;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
+using System.Threading;
 
 namespace Medicare.Presentation.Controllers
 {
@@ -13,15 +18,31 @@ namespace Medicare.Presentation.Controllers
     public class PatientController : Controller
     {
         private readonly ICreatePatientUseCase _createPatientUseCase;
+        private readonly ISessionService _sessionService;
+        private readonly IPatientService _patientService;
 
-        public PatientController(ICreatePatientUseCase createPatientUseCase)
+        public PatientController(ICreatePatientUseCase createPatientUseCase, ISessionService sessionService, IPatientService patientService)
         {
             _createPatientUseCase = createPatientUseCase;
+            _sessionService = sessionService;
+            _patientService = patientService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page, string search, CancellationToken cancellationToken)
         {
-            return View();
+            page = page ?? 1;
+            UserSessionInfo userSessionInfo = _sessionService.GetSession();
+            Expression<Func<Patient, bool>> searchFilter = FilterHelper.GetPatientFilter(search, userSessionInfo.OfficeId);
+            ICollection<Patient> recoveredDoctors = await _patientService.GetByPagesAsync((int)page, cancellationToken, searchFilter);
+            List<Patient> patients = recoveredDoctors.ToList();
+            int pages = await _patientService.GetRowsCountAsync(cancellationToken);
+            PatientsMenuViewModel patientsMenuViewModel = new PatientsMenuViewModel
+            {
+                Patients = patients,
+                Pages = pages,
+                CurrentPage = (int)page
+            };
+            return View(patientsMenuViewModel);
         }
 
         public async Task<IActionResult> Create()
