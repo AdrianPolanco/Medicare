@@ -6,7 +6,6 @@ using Medicare.Application.UseCases.Doctors;
 using Medicare.Application.UseCases.Interfaces;
 using Medicare.Application.UseCases.Users;
 using Medicare.Domain.Entities;
-using Medicare.Domain.Repositories.Base;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Medicare.Application.Extensions
@@ -29,6 +28,7 @@ namespace Medicare.Application.Extensions
             services.AddScoped<IFileService<Doctor>, FileService<Doctor>>();
             services.AddScoped<IRegisterDoctorUseCase, RegisterDoctorUseCase>();
             services.AddScoped<IDoctorService, DoctorService>();
+            services.AddScoped<IUpdateDoctorUseCase, UpdateDoctorUseCase>();
 
             return services;
         }

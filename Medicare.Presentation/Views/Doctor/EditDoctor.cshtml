@@ -1,6 +1,6 @@
 ﻿@using Medicare.Application.Services.Interfaces
 @using Medicare.Presentation.Models.Doctors
-@model CreateDoctorViewModel
+@model EditDoctorViewModel
 @inject IOfficeService officeService;
 @inject ISessionService sessionService;
 @{
@@ -15,19 +15,19 @@
     <h1 class="text-teal-400 text-center font-semibold text-3xl">Registrar Doctor</h1>
     <div class="flex items-center justify-center gap-x-10 p-10">
         <div class="flex flex-col items-center p-10 border border-1 rounded p-10">
-            <img class="w-60 h-60 mb-3 rounded" src="~/images/user-default.png" id="imageCard" />
-            <h5 class="mb-1 text-xl font-medium text-dark" id="nameCard"></h5>
+            <img class="w-60 h-60 mb-3 rounded" src="@Model.ImageRoute" id="imageCard" />
+            <h5 class="mb-1 text-xl font-medium text-dark" id="nameCard">@Model.Name @Model.Lastname</h5>
             <div class="flex gap-x-1">
                 <span class="text-sm text-gray-500 dark:text-gray-400">Email: </span>
-                <span class="text-sm text-gray-500 font-semibold" id="emailCard"></span>
+                <span class="text-sm text-gray-500 font-semibold" id="emailCard">@Model.Email</span>
             </div>
             <div class="flex gap-x-1">
                 <span class="text-sm text-gray-500 dark:text-gray-400">Telefono: </span>
-                <span class="text-sm text-gray-500 font-semibold" id="phoneCard"></span>
+                <span class="text-sm text-gray-500 font-semibold" id="phoneCard">@Model.Phone</span>
             </div>
             <div class="flex gap-x-1">
                 <span class="text-sm text-gray-500 dark:text-gray-400">Cedula: </span>
-                <span class="text-sm text-gray-500 font-semibold" id="idCard"></span>
+                <span class="text-sm text-gray-500 font-semibold" id="idCard">@Model.IdentityCard</span>
             </div>
             <div class="flex gap-x-1">
                 <span class="text-sm text-gray-500 dark:text-gray-400">Consultorio: </span>
@@ -36,8 +36,9 @@
         </div>
 
 
-        <form asp-action="SaveNewDoctor" enctype="multipart/form-data" method="post" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
+        <form asp-action="UpdateDoctor" enctype="multipart/form-data" method="post" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
             @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
             <div>
                 <label asp-for="Name" class="block mb-2 text-sm text-gray-600">Nombre</label>
                 <input asp-for="Name" type="text" id="name-input" placeholder="John" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" onblur="updateCard()" />
@@ -69,7 +70,7 @@
             </div>
             <div class="flex flex-col gap-x-2 justify-center items-start">
                 <label class="block mb-2 text-sm text-gray-600">Nombre del consultorio</label>
-                <input type="hidden" value="@currentUser.OfficeId" asp-for="OfficeId"/>
+                <input type="hidden" value="@currentUser.OfficeId" asp-for="OfficeId" />
                 <div class="w-1/2 py-1 px-2 bg-teal-300 rounded-md text-center">
                     <span class="text-white font-semibold" id="office-name-input">@office.Name</span>
                 </div>
@@ -84,6 +85,7 @@
                         <p class="text-xs text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
                     </div>
                     <input id="dropzone-file" type="file" class="hidden" onchange="previewImage(event)" asp-for="Image">
+                    <input type="hidden" asp-for="ImageRoute" />
                 </label>
             </div>
 
@@ -93,7 +95,7 @@
                 <span class="font-semibold">Volver atrás</span>
             </a>
             <button type="submit" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-teal-300 rounded-md hover:bg-teal-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
-                <span class="font-semibold">Registrar doctor</span>
+                <span class="font-semibold">Actualizar doctor</span>
                 <i class="fa-solid fa-arrow-right"></i>
             </button>
         </form>

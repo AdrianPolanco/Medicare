@@ -19,11 +19,17 @@ namespace Medicare.Presentation.Controllers
     public class DoctorController : Controller
     {
         private readonly IRegisterDoctorUseCase _registerDoctorUseCase;
+        private readonly IUpdateDoctorUseCase _updateDoctorUseCase;
         private readonly ISessionService _sessionService;
         private readonly IDoctorService _doctorService;
-        public DoctorController(IRegisterDoctorUseCase registerDoctorUseCase, ISessionService sessionService, IDoctorService doctorService)
+        public DoctorController(
+            IRegisterDoctorUseCase registerDoctorUseCase, 
+            IUpdateDoctorUseCase updateDoctorUseCase,
+            ISessionService sessionService, 
+            IDoctorService doctorService)
         {
             _registerDoctorUseCase = registerDoctorUseCase;
+            _updateDoctorUseCase = updateDoctorUseCase;
             _sessionService = sessionService;
             _doctorService = doctorService;
         }
@@ -78,5 +84,58 @@ namespace Medicare.Presentation.Controllers
 
             return RedirectToAction("Index");
         }   
+
+        public async Task<IActionResult> EditDoctor(Guid id, CancellationToken cancellationToken)
+        {
+            Doctor? doctor = await _doctorService.GetByIdAsync(id, cancellationToken);
+            if(doctor is null)
+                return RedirectToAction("Index");
+
+            EditDoctorViewModel editDoctorViewModel = new EditDoctorViewModel
+            {
+                Id = doctor.Id,
+                Name = doctor.Name,
+                Lastname = doctor.Lastname,
+                Email = doctor.Email,
+                Phone = doctor.Phone,
+                IdentityCard = doctor.IdentityCard,
+                OfficeId = doctor.OfficeId,
+                ImageRoute = doctor.ImageRoute
+            };
+
+            return View(editDoctorViewModel);
+        }
+
+        public async Task<IActionResult> UpdateDoctor(EditDoctorViewModel doctorViewModel, CancellationToken cancellationToken)
+        {
+            if(!ModelState.IsValid)
+                return View("EditDoctor", doctorViewModel);
+
+            Doctor doctor = new Doctor
+            {
+                Id = doctorViewModel.Id,
+                Name = doctorViewModel.Name,
+                Lastname = doctorViewModel.Lastname,
+                Email = doctorViewModel.Email,
+                Phone = doctorViewModel.Phone,
+                IdentityCard = doctorViewModel.IdentityCard,
+                OfficeId = doctorViewModel.OfficeId,
+                ImageRoute = doctorViewModel.ImageRoute
+            };
+
+            Stream? _fileStream = null;
+            string? _fileName = null;
+
+            if(doctorViewModel.Image is not null)
+            {
+                (var fileStream, var fileName) = await FileHelper.ConvertIFormFileToStreamAsync(doctorViewModel.Image, cancellationToken);
+                _fileStream = fileStream;
+                _fileName = fileName;
+            }
+
+            await _updateDoctorUseCase.ExecuteAsync(doctor, _fileStream, _fileName, cancellationToken);
+
+            return RedirectToAction("Index");
+        }
     }
 }

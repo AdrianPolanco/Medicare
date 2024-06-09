@@ -13,8 +13,6 @@
     UserSessionInfo userSessionInfo = _sessionService.GetSession();
 }
 
-
-
 <style>
 
     .table {
@@ -138,7 +136,7 @@
                 <td class="p-3">@doctor.Phone</td>
                 <td class="p-3">@doctor.IdentityCard</td>
                 <td class="p-3">
-                    <a asp-controller="Admin" asp-action="EditUser" asp-route-id="@doctor.Id" class="text-teal-400 hover:text-gray-100 mx-2">
+                    <a asp-controller="Doctor" asp-action="EditDoctor" asp-route-id="@doctor.Id" class="text-teal-400 hover:text-gray-100 mx-2">
                        <i class="fa-solid fa-pen-to-square"></i>
                     </a>
                     <button onclick="openModal('@doctor.Id')" class="text-red-400 hover:text-gray-100 ml-2">
@@ -171,7 +169,7 @@
                 {
                     <li>
                         <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
-                           asp-controller="Admin" asp-action="Index" asp-route-page="@i">
+                           asp-controller="Doctor" asp-action="Index" asp-route-page="@i">
                            @i
                         </a>
                     </li>
@@ -213,7 +211,7 @@
                 <button class="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg text-black hover:bg-gray-300">
                     Cancelar
                 </button>
-                <form asp-controller="Admin" asp-action="DeleteUser">
+                <form asp-controller="Doctor" asp-action="DeleteDoctor">
                     <input type="hidden" id="userIdToDelete" name="userId" />
                     <button type="submit" class="focus:outline-none px-4 bg-red-500 p-3 ml-3 rounded-lg text-white hover:bg-red-400">Eliminar usuario</button>
                 </form>
