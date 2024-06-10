@@ -11,6 +11,7 @@ namespace Medicare.Domain.Entities
         public ICollection<Doctor> Doctors { get; set; }
         public ICollection<LabTest> LabTests { get; set; }
         public ICollection<Patient> Patients { get; set; }
-
+        public ICollection<LabTestResult> LabTestResults { get; set; }
+        public ICollection<Appointment> Appointments { get; set; }
     }
 }

@@ -22,6 +22,48 @@ namespace Medicare.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Medicare.Domain.Entities.Appointment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("DoctorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeSpan>("Hour")
+                        .HasColumnType("time");
+
+                    b.Property<Guid>("OfficeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("OfficeId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("Appointments");
+                });
+
             modelBuilder.Entity("Medicare.Domain.Entities.Doctor", b =>
                 {
                     b.Property<Guid>("Id")
@@ -93,6 +135,56 @@ namespace Medicare.Infrastructure.Migrations
                     b.HasIndex("OfficeId");
 
                     b.ToTable("LabTests");
+                });
+
+            modelBuilder.Entity("Medicare.Domain.Entities.LabTestResult", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AppointmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCompleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<Guid>("LabTestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OfficeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PatientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Result")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("LabTestId");
+
+                    b.HasIndex("OfficeId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("LabTestResults");
                 });
 
             modelBuilder.Entity("Medicare.Domain.Entities.Office", b =>
@@ -201,13 +293,13 @@ namespace Medicare.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0a8f9753-537c-43e2-bc8e-82a7ae084627"),
+                            Id = new Guid("042b6095-2779-4c95-8ceb-61a92131099b"),
                             Deleted = false,
                             Name = "Administrador"
                         },
                         new
                         {
-                            Id = new Guid("86fdb1ec-4813-4e65-8f24-3c36d19a3a24"),
+                            Id = new Guid("d08e3a6e-758c-4bfa-925d-79096f58faf5"),
                             Deleted = false,
                             Name = "Asistente"
                         });
@@ -271,12 +363,39 @@ namespace Medicare.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Medicare.Domain.Entities.Appointment", b =>
+                {
+                    b.HasOne("Medicare.Domain.Entities.Doctor", "Doctor")
+                        .WithMany("Appointments")
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Medicare.Domain.Entities.Office", "Office")
+                        .WithMany("Appointments")
+                        .HasForeignKey("OfficeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Medicare.Domain.Entities.Patient", "Patient")
+                        .WithMany("Appointments")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Office");
+
+                    b.Navigation("Patient");
+                });
+
             modelBuilder.Entity("Medicare.Domain.Entities.Doctor", b =>
                 {
                     b.HasOne("Medicare.Domain.Entities.Office", "Office")
                         .WithMany("Doctors")
                         .HasForeignKey("OfficeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Office");
@@ -287,10 +406,45 @@ namespace Medicare.Infrastructure.Migrations
                     b.HasOne("Medicare.Domain.Entities.Office", "Office")
                         .WithMany("LabTests")
                         .HasForeignKey("OfficeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Office");
+                });
+
+            modelBuilder.Entity("Medicare.Domain.Entities.LabTestResult", b =>
+                {
+                    b.HasOne("Medicare.Domain.Entities.Appointment", "Appointment")
+                        .WithMany("LabTestResults")
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Medicare.Domain.Entities.LabTest", "LabTest")
+                        .WithMany("LabTestResults")
+                        .HasForeignKey("LabTestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Medicare.Domain.Entities.Office", "Office")
+                        .WithMany("LabTestResults")
+                        .HasForeignKey("OfficeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Medicare.Domain.Entities.Patient", "Patient")
+                        .WithMany("LabTestResults")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Appointment");
+
+                    b.Navigation("LabTest");
+
+                    b.Navigation("Office");
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Medicare.Domain.Entities.Patient", b =>
@@ -314,7 +468,8 @@ namespace Medicare.Infrastructure.Migrations
 
                     b.HasOne("Medicare.Domain.Entities.Office", "OwnedOffice")
                         .WithOne("Owner")
-                        .HasForeignKey("Medicare.Domain.Entities.User", "OwnedOfficeId");
+                        .HasForeignKey("Medicare.Domain.Entities.User", "OwnedOfficeId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Medicare.Domain.Entities.Role", "Role")
                         .WithMany("Users")
@@ -329,9 +484,28 @@ namespace Medicare.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Medicare.Domain.Entities.Appointment", b =>
+                {
+                    b.Navigation("LabTestResults");
+                });
+
+            modelBuilder.Entity("Medicare.Domain.Entities.Doctor", b =>
+                {
+                    b.Navigation("Appointments");
+                });
+
+            modelBuilder.Entity("Medicare.Domain.Entities.LabTest", b =>
+                {
+                    b.Navigation("LabTestResults");
+                });
+
             modelBuilder.Entity("Medicare.Domain.Entities.Office", b =>
                 {
+                    b.Navigation("Appointments");
+
                     b.Navigation("Doctors");
+
+                    b.Navigation("LabTestResults");
 
                     b.Navigation("LabTests");
 
@@ -341,6 +515,13 @@ namespace Medicare.Infrastructure.Migrations
                     b.Navigation("Patients");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Medicare.Domain.Entities.Patient", b =>
+                {
+                    b.Navigation("Appointments");
+
+                    b.Navigation("LabTestResults");
                 });
 
             modelBuilder.Entity("Medicare.Domain.Entities.Role", b =>

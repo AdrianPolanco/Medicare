@@ -16,7 +16,8 @@ namespace Medicare.Infrastructure.Context.Configurations
             builder
                 .HasOne(o => o.Owner)
                 .WithOne(u => u.OwnedOffice)
-                .HasForeignKey<User>(o => o.OwnedOfficeId);
+                .HasForeignKey<User>(o => o.OwnedOfficeId)
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

@@ -16,6 +16,9 @@ namespace Medicare.Infrastructure.Context
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<LabTest> LabTests { get; set; }
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<LabTestResult> LabTestResults { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,6 +28,8 @@ namespace Medicare.Infrastructure.Context
             modelBuilder.ApplyConfiguration(new DoctorConfiguration());
             modelBuilder.ApplyConfiguration(new LabTestConfiguration());
             modelBuilder.ApplyConfiguration(new PatientConfiguration());
+            modelBuilder.ApplyConfiguration(new LabTestResultConfiguration());
+            modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

@@ -20,7 +20,8 @@ namespace Medicare.Infrastructure.Context.Configurations
 
             builder.HasOne(d => d.Office)
                 .WithMany(o => o.Doctors)
-                .HasForeignKey(d => d.OfficeId);
+                .HasForeignKey(d => d.OfficeId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasQueryFilter(d => !d.Deleted);    
         }

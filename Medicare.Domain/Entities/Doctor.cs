@@ -14,6 +14,7 @@ namespace Medicare.Domain.Entities
         public Guid OfficeId { get; set; }
         public Office Office { get; set; }
         public string ImageRoute { get; set; }
+        public ICollection<Appointment> Appointments { get; set; }
 
     }
 }
