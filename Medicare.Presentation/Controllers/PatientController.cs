@@ -41,8 +41,8 @@ namespace Medicare.Presentation.Controllers
             page = page ?? 1;
             UserSessionInfo userSessionInfo = _sessionService.GetSession();
             Expression<Func<Patient, bool>> searchFilter = FilterHelper.GetPatientFilter(search, userSessionInfo.OfficeId);
-            ICollection<Patient> recoveredDoctors = await _patientService.GetByPagesAsync((int)page, cancellationToken, searchFilter);
-            List<Patient> patients = recoveredDoctors.ToList();
+            ICollection<Patient> recoveredPatients = await _patientService.GetByPagesAsync((int)page, cancellationToken, searchFilter);
+            List<Patient> patients = recoveredPatients.ToList();
             int pages = await _patientService.GetRowsCountAsync(cancellationToken);
             PatientsMenuViewModel patientsMenuViewModel = new PatientsMenuViewModel
             {

@@ -1,9 +1,15 @@
-﻿using Medicare.Application.UseCases.Appointments.Interfaces;
+﻿using Medicare.Application.Models;
+using Medicare.Application.Services.Interfaces;
+using Medicare.Application.UseCases.Appointments.Interfaces;
 using Medicare.Domain;
 using Medicare.Domain.Entities;
 using Medicare.Presentation.Filters;
+using Medicare.Presentation.Helpers;
 using Medicare.Presentation.Models.Appointments;
+using Medicare.Presentation.Models.Patients;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
+using System.Threading;
 
 namespace Medicare.Presentation.Controllers
 {
@@ -12,13 +18,29 @@ namespace Medicare.Presentation.Controllers
     public class AppointmentController : Controller
     {       
         private readonly ICreateAppointmentUseCase _createAppointmentUseCase;
-        public AppointmentController(ICreateAppointmentUseCase createAppointmentUseCase)
+        private readonly ISessionService _sessionService;
+        private readonly IAppointmentService _appointmentService;
+        public AppointmentController(ICreateAppointmentUseCase createAppointmentUseCase, ISessionService sessionService, IAppointmentService appointmentService)
         {
             _createAppointmentUseCase = createAppointmentUseCase;
+            _sessionService = sessionService;
+            _appointmentService = appointmentService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? page, string search, CancellationToken cancellationToken)
         {
-            return View();
+            page = page ?? 1;
+            UserSessionInfo userSessionInfo = _sessionService.GetSession();
+            Expression<Func<Appointment, bool>> searchFilter = FilterHelper.GetAppointmentFilter(search, userSessionInfo.OfficeId);
+            ICollection<Appointment> recoveredAppointments = await _appointmentService.GetByPagesAsync((int)page, cancellationToken, searchFilter);
+            List<Appointment> appointments = recoveredAppointments.ToList();
+            int pages = await _appointmentService.GetRowsCountAsync(cancellationToken);
+            AppointmentsMenuViewModel appointmentsMenuViewModel = new AppointmentsMenuViewModel
+            {
+                Appointments = appointments,
+                Pages = pages,
+                CurrentPage = (int)page
+            };
+            return View(appointmentsMenuViewModel);
         }
 
         public IActionResult Create()
