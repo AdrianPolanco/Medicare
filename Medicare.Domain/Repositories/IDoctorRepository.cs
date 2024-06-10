@@ -4,7 +4,7 @@ using Medicare.Domain.Repositories.Base;
 
 namespace Medicare.Domain.Repositories
 {
-    public interface IDoctorRepository: IRepository<Doctor>
+    public interface IDoctorRepository: ISelectableRepository<Doctor>
     {
     }
 }

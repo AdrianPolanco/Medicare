@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace Medicare.Application.Services
 {
-    public class DoctorService : Service<Doctor>, IDoctorService
+    public class DoctorService : SelectableService<Doctor>, IDoctorService
     {
         public readonly IDoctorRepository _doctorRepository;
         public DoctorService(IDoctorRepository doctorRepository): base(doctorRepository)

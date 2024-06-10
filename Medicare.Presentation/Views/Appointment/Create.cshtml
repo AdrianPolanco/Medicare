@@ -1,0 +1,90 @@
+﻿@using Medicare.Application.Services.Interfaces
+@using Medicare.Domain.Entities
+@using Medicare.Presentation.Models.Appointments
+@using Medicare.Presentation.Models.Users
+@model CreateAppointmentViewModel;
+@inject ISessionService _sessionService;
+@inject IDoctorService _doctorService;
+@inject IPatientService _patientService;
+@inject ILabTestService _labTestService;
+@{
+    ViewData["Title"] = "Crear cita - Medicare";
+    Layout = "~/Views/Shared/AuthenticatedPartialView.cshtml";
+    User currentUser = await _sessionService.GetCurrentUser();
+    ICollection<Doctor> doctors = await _doctorService.GetAllAsync(new CancellationToken(), d => d.OfficeId == currentUser.OfficeId);
+    ICollection<Patient> patients = await _patientService.GetAllAsync(new CancellationToken(), p => p.OfficeId == currentUser.OfficeId);
+    ICollection<LabTest> labTests = await _labTestService.GetAllAsync(new CancellationToken(), l => l.OfficeId == currentUser.OfficeId);
+}
+
+<section class="bg-white">
+    <div class="flex justify-center">
+        <div class="flex items-center w-full max-w-3xl p-8 mx-auto lg:px-12 lg:w-3/5">
+            
+
+                <form asp-action="Save" method="post" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
+                    @Html.AntiForgeryToken()
+                    <div>
+                        <label asp-for="SelectedDoctorId" class="block mb-2 text-sm text-gray-600">Doctor</label>
+                        <select asp-for="SelectedDoctorId" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40">
+                        <option disabled>Selecciona un doctor</option>
+                            @foreach (Doctor doctor in doctors)
+                            {
+                                <option value="@doctor.Id">@doctor.Name @doctor.Lastname</option>
+                            }
+                        </select>
+                        <span asp-validation-for="SelectedDoctorId" class="text-red-500"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="SelectedPatientId" class="block mb-2 text-sm text-gray-600">Paciente</label>        
+                        <select asp-for="SelectedPatientId" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40">
+                        <option disabled>Selecciona un paciente</option>
+                            @foreach (Patient patient in patients)
+                            {
+                                <option value="@patient.Id">@patient.Name @patient.Lastname</option>
+                            }
+                        </select>
+                        <span asp-validation-for="SelectedPatientId" class="text-red-500"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="Date" class="block mb-2 text-sm text-gray-600">Fecha</label>
+                        <input asp-for="Date" type="date" placeholder="31/12/2024" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                        <span asp-validation-for="Date" class="text-red-500"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="Time" class="block mb-2 text-sm text-gray-600">Hora</label>
+                        <input asp-for="Time" type="time" placeholder="00:00" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                        <span asp-validation-for="Time" class="text-red-500"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="Reason" class="block mb-2 text-sm text-gray-600">Causa</label>
+                    <textarea asp-for="Reason" type="text" rows="4" placeholder="Introduce una causa de la consulta" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"></textarea>
+                        <span asp-validation-for="Reason" class="text-red-500"></span>
+                    </div>
+                    <div class="flex flex-col gap-x-2 justify-center items-start">
+                        <label class="block mb-2 text-sm text-gray-600">Nombre del consultorio</label>
+                        <input type="hidden" value="currentUser.OfficeId" name="currentOffice" />
+                        <div class="w-1/2 py-1 px-2 bg-teal-300 rounded-md">
+                            <span class="text-white font-semibold">@currentUser.Office.Name</span>
+                        </div>
+                    </div>
+
+                    <a asp-controller="Appointment" asp-action="Index" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span class="font-semibold">Volver atrás</span>
+                    </a>
+                    <button type="submit" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-teal-300 rounded-md hover:bg-teal-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                        <span class="font-semibold">Registrar cita</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

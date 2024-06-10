@@ -3,7 +3,7 @@ using Medicare.Domain.Repositories.Base;
 
 namespace Medicare.Domain.Repositories
 {
-    public interface IPatientRepository: ISelectableRepository<Patient>
+    public interface IAppointmentRepository : IRepository<Appointment>
     {
     }
 }

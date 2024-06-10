@@ -23,6 +23,7 @@ namespace Medicare.Infrastructure.Context.Configurations
 
             builder.Property(a => a.Hour).HasConversion(converter).HasColumnType("time");
 
+            builder.HasQueryFilter(a => !a.Deleted);
         }
     }
 }

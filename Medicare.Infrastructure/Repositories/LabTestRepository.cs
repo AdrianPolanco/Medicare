@@ -1,14 +1,15 @@
 ﻿using Medicare.Domain.Entities;
 using Medicare.Domain.Repositories;
+using Medicare.Domain.Repositories.Base;
 using Medicare.Infrastructure.Context;
 using Medicare.Infrastructure.Repositories.Base;
 using System.Linq.Expressions;
 
 namespace Medicare.Infrastructure.Repositories
 {
-    public class LabTestRepository: Repository<LabTest>, ILabTestRepository
+    public class LabTestRepository: SelectableRepository<LabTest>, ILabTestRepository
     {
-        public LabTestRepository(ApplicationDbContext applicationDbContext): base(applicationDbContext)
+        public LabTestRepository(ApplicationDbContext applicationDbContext, ISelectableReadOnlyRepository<LabTest> repository) : base(applicationDbContext, repository)
         {
             
         }

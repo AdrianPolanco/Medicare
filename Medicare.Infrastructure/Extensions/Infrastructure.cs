@@ -30,9 +30,10 @@ namespace Medicare.Infrastructure.Extensions
             services.AddScoped<IReadOnlyRepository<Role>, RoleRepository>();
             services.AddScoped<IPartialRepository<Office>, OfficeRepository>();
             services.AddScoped<IRepository<User>, UserRepository>();
+            services.AddScoped(typeof(ISelectableReadOnlyRepository<>), typeof(SelectableReadOnlyRepository<>));
+            services.AddScoped(typeof(ISelectablePartialRepository<>), typeof(SelectablePartialRepository<>));
+            services.AddScoped(typeof(ISelectableRepository<>), typeof(SelectableRepository<>));
 
-
-            
             //Repositorios concretos
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOfficeRepository, OfficeRepository>();
@@ -40,6 +41,8 @@ namespace Medicare.Infrastructure.Extensions
             services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<ILabTestRepository, LabTestRepository>();
             services.AddScoped<IPatientRepository, PatientRepository>();
+            services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+            services.AddScoped<ILabTestResultRepository, LabTestResultRepository>();
 
             //Servicios de infraestructura
             services.AddScoped<ISessionService, SessionService>();

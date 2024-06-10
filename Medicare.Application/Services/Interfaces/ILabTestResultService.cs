@@ -3,7 +3,7 @@ using Medicare.Domain.Entities;
 
 namespace Medicare.Application.Services.Interfaces
 {
-   public interface IPatientService: ISelectableService<Patient>
+    public interface ILabTestResultService : IService<LabTestResult>
     {
     }
 }

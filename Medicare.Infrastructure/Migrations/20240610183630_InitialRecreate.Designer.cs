@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Medicare.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240610152333_RecreatedAgain")]
-    partial class RecreatedAgain
+    [Migration("20240610183630_InitialRecreate")]
+    partial class InitialRecreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -296,13 +296,13 @@ namespace Medicare.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("042b6095-2779-4c95-8ceb-61a92131099b"),
+                            Id = new Guid("51e550ac-89d2-425a-8f57-2e318b716dcc"),
                             Deleted = false,
                             Name = "Administrador"
                         },
                         new
                         {
-                            Id = new Guid("d08e3a6e-758c-4bfa-925d-79096f58faf5"),
+                            Id = new Guid("79d5c157-a53f-404c-95f0-8164f60168f1"),
                             Deleted = false,
                             Name = "Asistente"
                         });

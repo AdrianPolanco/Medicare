@@ -1,6 +1,8 @@
 ﻿using Medicare.Application.Services;
 using Medicare.Application.Services.Interfaces;
 using Medicare.Application.Services.Interfaces.Base;
+using Medicare.Application.UseCases.Appointments;
+using Medicare.Application.UseCases.Appointments.Interfaces;
 using Medicare.Application.UseCases.Doctors;
 using Medicare.Application.UseCases.Doctors.Interfaces;
 using Medicare.Application.UseCases.Patients;
@@ -16,6 +18,8 @@ namespace Medicare.Application.Extensions
     {
         public static IServiceCollection AddApplicationLayer(this IServiceCollection services)
         {
+            //Servicios genericos
+            
             //Servicios de entidades
             services.AddScoped<IReadOnlyService<Role>, RoleService>();
             services.AddScoped<IPartialService<Office>, OfficeService>();
@@ -26,6 +30,8 @@ namespace Medicare.Application.Extensions
             services.AddScoped<ILabTestService, LabTestService>();
             services.AddScoped<IPatientService, PatientService>();
             services.AddScoped<IDoctorService, DoctorService>();
+            services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<ILabTestResultService, LabTestResultService>();
 
             //Servicios de autenticacion e subida de imagenes
             services.AddScoped<IAuthenticationService, AuthenticationService>();
@@ -47,6 +53,9 @@ namespace Medicare.Application.Extensions
             services.AddScoped<ICreatePatientUseCase, CreatePatientUseCase>();
             services.AddScoped<IUpdatePatientUseCase, UpdatePatientUseCase>();
             services.AddScoped<IDeletePatientUseCase, DeletePatientUseCase>();
+
+            //Casos de uso de citas
+            services.AddScoped<ICreateAppointmentUseCase, CreateAppointmentUseCase>();
 
             return services;
         }

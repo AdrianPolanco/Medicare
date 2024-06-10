@@ -9,9 +9,9 @@ using System.Linq.Expressions;
 
 namespace Medicare.Infrastructure.Repositories
 {
-    public class DoctorRepository: Repository<Doctor>, IDoctorRepository
+    public class DoctorRepository: SelectableRepository<Doctor>, IDoctorRepository
     {
-        public DoctorRepository(ApplicationDbContext context) : base(context)
+        public DoctorRepository(ApplicationDbContext context, ISelectableReadOnlyRepository<Doctor> repository) : base(context, repository)
         {
         }
 

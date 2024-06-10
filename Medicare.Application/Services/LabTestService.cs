@@ -6,7 +6,7 @@ using Medicare.Domain.Repositories;
 
 namespace Medicare.Application.Services
 {
-    public class LabTestService: Service<LabTest>, ILabTestService
+    public class LabTestService: SelectableService<LabTest>, ILabTestService
     {
         public LabTestService(ILabTestRepository labTestRepository): base(labTestRepository)
         {

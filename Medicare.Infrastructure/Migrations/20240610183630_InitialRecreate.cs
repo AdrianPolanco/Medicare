@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Medicare.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class RecreatedAgain : Migration
+    public partial class InitialRecreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -236,8 +236,8 @@ namespace Medicare.Infrastructure.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("042b6095-2779-4c95-8ceb-61a92131099b"), "Administrador" },
-                    { new Guid("d08e3a6e-758c-4bfa-925d-79096f58faf5"), "Asistente" }
+                    { new Guid("51e550ac-89d2-425a-8f57-2e318b716dcc"), "Administrador" },
+                    { new Guid("79d5c157-a53f-404c-95f0-8164f60168f1"), "Asistente" }
                 });
 
             migrationBuilder.CreateIndex(

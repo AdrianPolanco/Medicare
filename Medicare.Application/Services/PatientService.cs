@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace Medicare.Application.Services
 {
-    public class PatientService : Service<Patient>, IPatientService
+    public class PatientService : SelectableService<Patient>, IPatientService
     {
         public PatientService(IPatientRepository repository) : base(repository)
         {

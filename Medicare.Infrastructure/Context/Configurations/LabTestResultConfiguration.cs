@@ -16,7 +16,7 @@ namespace Medicare.Infrastructure.Context.Configurations
             builder.HasOne(ltr => ltr.Office).WithMany(o => o.LabTestResults).HasForeignKey(ltr => ltr.OfficeId).OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(ltr => ltr.CreatedAt).HasDefaultValueSql("GETDATE()");
-            builder.HasQueryFilter(ltr => !ltr.Deleted && !ltr.IsCompleted);  
+            builder.HasQueryFilter(ltr => !ltr.Deleted);  
         }
     }
 }

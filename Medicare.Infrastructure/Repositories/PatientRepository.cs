@@ -1,14 +1,15 @@
 ﻿using Medicare.Domain.Entities;
 using Medicare.Domain.Repositories;
+using Medicare.Domain.Repositories.Base;
 using Medicare.Infrastructure.Context;
 using Medicare.Infrastructure.Repositories.Base;
 using System.Linq.Expressions;
 
 namespace Medicare.Infrastructure.Repositories
 {
-    public class PatientRepository : Repository<Patient> ,IPatientRepository
+    public class PatientRepository : SelectableRepository<Patient> ,IPatientRepository
     {
-        public PatientRepository(ApplicationDbContext context) : base(context)
+        public PatientRepository(ApplicationDbContext context, ISelectableReadOnlyRepository<Patient> repository) : base(context, repository)
         {
         }
 
