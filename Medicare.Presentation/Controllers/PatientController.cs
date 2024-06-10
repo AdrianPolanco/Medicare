@@ -5,11 +5,9 @@ using Medicare.Domain.Entities;
 using Medicare.Infrastructure.Helpers;
 using Medicare.Presentation.Filters;
 using Medicare.Presentation.Helpers;
-using Medicare.Presentation.Models.Doctors;
 using Medicare.Presentation.Models.Patients;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
-using System.Threading;
 
 namespace Medicare.Presentation.Controllers
 {
@@ -18,12 +16,19 @@ namespace Medicare.Presentation.Controllers
     public class PatientController : Controller
     {
         private readonly ICreatePatientUseCase _createPatientUseCase;
+        private readonly IUpdatePatientUseCase _updatePatientUseCase;
         private readonly ISessionService _sessionService;
         private readonly IPatientService _patientService;
 
-        public PatientController(ICreatePatientUseCase createPatientUseCase, ISessionService sessionService, IPatientService patientService)
+        public PatientController(
+            ICreatePatientUseCase createPatientUseCase,
+            ISessionService sessionService,
+            IPatientService patientService,
+            IUpdatePatientUseCase updatePatientUseCase
+            )
         {
             _createPatientUseCase = createPatientUseCase;
+            _updatePatientUseCase = updatePatientUseCase;
             _sessionService = sessionService;
             _patientService = patientService;
         }
@@ -78,6 +83,59 @@ namespace Medicare.Presentation.Controllers
             }
 
             await _createPatientUseCase.ExecuteAsync(patient, _fileStream, _fileName, cancellationToken);
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Edit(Guid id, CancellationToken cancellationToken)
+        {
+            Patient patient = await _patientService.GetByIdAsync(id, cancellationToken);
+            UpdatePatientViewModel updatePatientViewModel = new UpdatePatientViewModel
+            {
+                Id = patient.Id,
+                Name = patient.Name,
+                Lastname = patient.Lastname,
+                Address = patient.Address,
+                PhoneNumber = patient.PhoneNumber,
+                IdentityCard = patient.IdentityCard,
+                BirthDate = patient.BirthDate,
+                IsSmoker = patient.IsSmoker,
+                HasAllergy = patient.HasAllergy,
+                Photo = patient.Photo
+            };
+            return View(updatePatientViewModel);
+        }
+
+        public async Task<IActionResult> Update(UpdatePatientViewModel updatePatientViewModel, CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+                return View("Edit", updatePatientViewModel);
+
+            Patient patient = new Patient
+            {
+                Name = updatePatientViewModel.Name,
+                Lastname = updatePatientViewModel.Lastname,
+                Address = updatePatientViewModel.Address,
+                PhoneNumber = updatePatientViewModel.PhoneNumber,
+                IdentityCard = updatePatientViewModel.IdentityCard,
+                BirthDate = updatePatientViewModel.BirthDate,
+                IsSmoker = updatePatientViewModel.IsSmoker,
+                HasAllergy = updatePatientViewModel.HasAllergy,
+                Id = updatePatientViewModel.Id,
+                Photo = updatePatientViewModel.Photo,
+            };
+
+            Stream? _fileStream = null;
+            string? _fileName = null;
+
+            if (updatePatientViewModel.Image is not null)
+            {
+                (var fileStream, var fileName) = await FileHelper.ConvertIFormFileToStreamAsync(updatePatientViewModel.Image, cancellationToken);
+                _fileStream = fileStream;
+                _fileName = fileName;
+            }
+
+            await _updatePatientUseCase.ExecuteAsync(patient, _fileStream, _fileName, cancellationToken);
 
             return RedirectToAction("Index");
         }

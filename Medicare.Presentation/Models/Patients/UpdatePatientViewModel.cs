@@ -1,15 +1,19 @@
 ﻿using Medicare.Presentation.Filters.Attributes;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Medicare.Presentation.Models.Patients
 {
-    public class CreatePatientViewModel
+    public class UpdatePatientViewModel
     {
+        [Required]
+        public Guid Id { get; set; }
+
         [Required]
         [MinLength(1, ErrorMessage = "El nombre debe tener al menos 1 caracter")]
         [MaxLength(50, ErrorMessage = "El nombre no puede tener más de 50 caracteres")]
         [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s'-]*$",
-           ErrorMessage = "El apellido solo puede contener letras y caracteres latinos")]
+   ErrorMessage = "El apellido solo puede contener letras y caracteres latinos")]
         public string Name { get; set; }
 
         [Required]
@@ -48,5 +52,7 @@ namespace Medicare.Presentation.Models.Patients
 
         [DataType(DataType.Upload)]
         public IFormFile? Image { get; set; }
+
+        public string Photo { get; set; }
     }
 }

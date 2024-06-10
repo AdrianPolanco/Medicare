@@ -141,7 +141,7 @@
                                     var photo = string.IsNullOrEmpty(patient.Photo) ? "/images/user-default.png" : patient.Photo;
                                     <tr class="bg-teal-50">
 
-                                        <td class=""><img class="w-10 h-10 rounded-full" src="@photo" alt="Jese image"></td>
+                                        <td class="p-3"><img class="w-10 h-10 rounded-full" src="@photo" alt="Jese image"></td>
                                         <td class="p-3 font-medium capitalize">@patient.Name</td>
                                         <td class="p-3">@patient.Lastname</td>
                                         <td class="p-3">@patient.Address</td>
@@ -165,7 +165,7 @@
                                             <td class="p-3">No</td>
                                         }
                                         <td class="p-3">
-                                            <a asp-controller="Patient" asp-action="EditPatient" asp-route-id="@patient.Id" class="text-teal-400 hover:text-gray-100 mx-2">
+                                            <a asp-controller="Patient" asp-action="Edit" asp-route-id="@patient.Id" class="text-teal-400 hover:text-gray-100 mx-2">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
                                             <button onclick="openModal('@patient.Id')" class="text-red-400 hover:text-gray-100 ml-2">

@@ -11,7 +11,7 @@ namespace Medicare.Domain.Entities
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public string IdentityCard { get; set; }     
-        public DateOnly BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
         public bool IsSmoker { get; set; }
         public bool HasAllergy { get; set; }
         public string? Photo { get; set; }

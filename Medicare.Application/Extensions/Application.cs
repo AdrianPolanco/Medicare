@@ -46,6 +46,7 @@ namespace Medicare.Application.Extensions
 
             //Casos de uso de pacientes
             services.AddScoped<ICreatePatientUseCase, CreatePatientUseCase>();
+            services.AddScoped<IUpdatePatientUseCase, UpdatePatientUseCase>();
 
             return services;
         }

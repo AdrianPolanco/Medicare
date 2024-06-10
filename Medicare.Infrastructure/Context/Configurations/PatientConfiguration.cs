@@ -21,9 +21,9 @@ namespace Medicare.Infrastructure.Context.Configurations
             builder.Property(p => p.Photo).HasMaxLength(300);
             builder.Property(p => p.Deleted).HasDefaultValue(false);
 
-            ValueConverter<DateOnly, DateTime> dateOnlyConverter = new(v => v.ToDateTime(TimeOnly.MinValue), v => DateOnly.FromDateTime(v));
+           /* ValueConverter<DateOnly, DateTime> dateOnlyConverter = new(v => v.ToDateTime(TimeOnly.MinValue), v => DateOnly.FromDateTime(v));
 
-            builder.Property(p => p.BirthDate).HasConversion(dateOnlyConverter);
+            builder.Property(p => p.BirthDate).HasConversion(dateOnlyConverter);*/
 
             builder.HasOne(p => p.Office)
                 .WithMany(o => o.Patients)
