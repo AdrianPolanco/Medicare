@@ -2,6 +2,6 @@
 {
     public interface IDeleteDoctorUseCase
     {
-        Task<bool> ExecyteAsync(Guid id, CancellationToken cancellationToken);
+        Task<bool> ExecuteAsync(Guid id, CancellationToken cancellationToken);
     }
 }

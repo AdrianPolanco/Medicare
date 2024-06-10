@@ -25,8 +25,9 @@ namespace Medicare.Application.Extensions
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ILabTestService, LabTestService>();
             services.AddScoped<IPatientService, PatientService>();
+            services.AddScoped<IDoctorService, DoctorService>();
 
-           //Servicios de autenticacion e subida de imagenes
+            //Servicios de autenticacion e subida de imagenes
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IFileService<Doctor>, FileService<Doctor>>();
             services.AddScoped<IFileService<Patient>, FileService<Patient>>();
@@ -39,14 +40,13 @@ namespace Medicare.Application.Extensions
             
             //Casos de uso de Doctores
             services.AddScoped<IRegisterDoctorUseCase, RegisterDoctorUseCase>();
-            services.AddScoped<IDoctorService, DoctorService>();
-            services.AddScoped<IPatientService, PatientService>();
             services.AddScoped<IUpdateDoctorUseCase, UpdateDoctorUseCase>();
             services.AddScoped<IDeleteDoctorUseCase, DeleteDoctorUseCase>();
 
             //Casos de uso de pacientes
             services.AddScoped<ICreatePatientUseCase, CreatePatientUseCase>();
             services.AddScoped<IUpdatePatientUseCase, UpdatePatientUseCase>();
+            services.AddScoped<IDeletePatientUseCase, DeletePatientUseCase>();
 
             return services;
         }

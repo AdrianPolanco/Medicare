@@ -14,7 +14,7 @@ namespace Medicare.Application.UseCases.Doctors
             _fileService = fileService;
             _doctorService = doctorService;
         }
-        public async Task<bool> ExecyteAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<bool> ExecuteAsync(Guid id, CancellationToken cancellationToken)
         {
             await _doctorService.DeleteAsync(id, cancellationToken);
             _fileService.DeleteFolder(id);

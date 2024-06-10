@@ -142,7 +142,7 @@ namespace Medicare.Presentation.Controllers
 
         public async Task<IActionResult> DeleteDoctor(Guid doctorId, CancellationToken cancellationToken)
         {
-            await _deleteDoctorUseCase.ExecyteAsync(doctorId, cancellationToken);
+            await _deleteDoctorUseCase.ExecuteAsync(doctorId, cancellationToken);
             return RedirectToAction("Index");
         }
     }

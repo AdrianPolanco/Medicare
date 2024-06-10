@@ -237,9 +237,9 @@
                 <button class="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg text-black hover:bg-gray-300">
                     Cancelar
                 </button>
-                <form asp-controller="Doctor" asp-action="DeleteDoctor">
-                    <input type="hidden" id="doctorIdToDelete" name="doctorId" />
-                    <button type="submit" class="focus:outline-none px-4 bg-red-500 p-3 ml-3 rounded-lg text-white hover:bg-red-400">Eliminar doctor</button>
+                <form asp-controller="Patient" asp-action="Delete">
+                    <input type="hidden" id="patientIdToDelete" name="patientId" />
+                    <button type="submit" class="focus:outline-none px-4 bg-red-500 p-3 ml-3 rounded-lg text-white hover:bg-red-400">Eliminar paciente</button>
                 </form>
             </div>
         </div>
@@ -258,7 +258,7 @@
     }
 
     const openModal = (userId) => {
-        document.getElementById('doctorIdToDelete').value = userId;
+        document.getElementById('patientIdToDelete').value = userId;
         modal.classList.remove('fadeOut');
         modal.classList.add('fadeIn');
         modal.style.display = 'flex';

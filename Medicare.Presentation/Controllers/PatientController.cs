@@ -17,18 +17,21 @@ namespace Medicare.Presentation.Controllers
     {
         private readonly ICreatePatientUseCase _createPatientUseCase;
         private readonly IUpdatePatientUseCase _updatePatientUseCase;
+        private readonly IDeletePatientUseCase _deletePatientUseCase;
         private readonly ISessionService _sessionService;
         private readonly IPatientService _patientService;
 
         public PatientController(
             ICreatePatientUseCase createPatientUseCase,
+            IUpdatePatientUseCase updatePatientUseCase,
+            IDeletePatientUseCase deletePatientUseCase,
             ISessionService sessionService,
-            IPatientService patientService,
-            IUpdatePatientUseCase updatePatientUseCase
+            IPatientService patientService          
             )
         {
             _createPatientUseCase = createPatientUseCase;
             _updatePatientUseCase = updatePatientUseCase;
+            _deletePatientUseCase = deletePatientUseCase;
             _sessionService = sessionService;
             _patientService = patientService;
         }
@@ -137,6 +140,12 @@ namespace Medicare.Presentation.Controllers
 
             await _updatePatientUseCase.ExecuteAsync(patient, _fileStream, _fileName, cancellationToken);
 
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Delete(Guid patientId, CancellationToken cancellationToken)
+        {
+            await _deletePatientUseCase.ExecuteAsync(patientId, cancellationToken);
             return RedirectToAction("Index");
         }
     }
