@@ -18,13 +18,20 @@ namespace Medicare.Presentation.Controllers
     public class AppointmentController : Controller
     {       
         private readonly ICreateAppointmentUseCase _createAppointmentUseCase;
+        private readonly IAssignLabTestsToAppointmentUseCase _assignLabTestsToAppointmentUseCase;
         private readonly ISessionService _sessionService;
         private readonly IAppointmentService _appointmentService;
-        public AppointmentController(ICreateAppointmentUseCase createAppointmentUseCase, ISessionService sessionService, IAppointmentService appointmentService)
+
+        public AppointmentController(
+            ICreateAppointmentUseCase createAppointmentUseCase, 
+            ISessionService sessionService, 
+            IAppointmentService appointmentService,
+            IAssignLabTestsToAppointmentUseCase assignLabTestsToAppointmentUseCase)
         {
             _createAppointmentUseCase = createAppointmentUseCase;
             _sessionService = sessionService;
             _appointmentService = appointmentService;
+            _assignLabTestsToAppointmentUseCase = assignLabTestsToAppointmentUseCase;
         }
         public async Task<IActionResult> Index(int? page, string search, CancellationToken cancellationToken)
         {
@@ -64,6 +71,30 @@ namespace Medicare.Presentation.Controllers
             };
 
             await _createAppointmentUseCase.ExecuteAsync(appointment, cancellationToken);
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Details(Guid id, CancellationToken cancellationToken)
+        {
+            Appointment appointment = await _appointmentService.GetByIdAsync(id, cancellationToken);
+            AppointmentDetailsViewModel appointmentDetailsViewModel = new AppointmentDetailsViewModel
+            {
+                Appointment = appointment,
+                IsValid = true
+            };
+            return View(appointmentDetailsViewModel);
+        }
+
+        public async Task<IActionResult> CreateLabTests(AppointmentDetailsViewModel appointmentDetailsViewModel, List<Guid> selectedLabTests, CancellationToken cancellationToken)
+        {
+            if(selectedLabTests.Count == 0)
+            {
+                appointmentDetailsViewModel.IsValid = false;
+                return View(appointmentDetailsViewModel);
+            }
+
+            await _assignLabTestsToAppointmentUseCase.ExecuteAsync(appointmentDetailsViewModel.Appointment, selectedLabTests, cancellationToken);
+
             return RedirectToAction("Index");
         }
     }

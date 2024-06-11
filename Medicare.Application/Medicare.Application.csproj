@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="Session\" />
+    <Folder Include="UseCases\LabTestsResults\" />
   </ItemGroup>
 
 </Project>

@@ -56,6 +56,7 @@ namespace Medicare.Application.Extensions
 
             //Casos de uso de citas
             services.AddScoped<ICreateAppointmentUseCase, CreateAppointmentUseCase>();
+            services.AddScoped<IAssignLabTestsToAppointmentUseCase, AssignLabTestsToAppointmentUseCase>();
 
             return services;
         }
