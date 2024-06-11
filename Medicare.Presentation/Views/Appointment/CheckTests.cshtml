@@ -4,9 +4,10 @@
 @using Medicare.Presentation.Models.Doctors
 @using Medicare.Application.Models
 @using Medicare.Domain.Entities
+@using Medicare.Presentation.Models.LabTestsResults
 @using Medicare.Presentation.Models.Patients
 @using Medicare.Presentation.Models.Users
-@model AppointmentsMenuViewModel
+@model LabTestsMenuViewModel
 @inject ISessionService _sessionService;
 @{
     ViewData["Title"] = "Medicare - Citas";
@@ -86,83 +87,49 @@
 <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
       rel="stylesheet" />
 <div class="flex flex-col items-center min-h-screen bg-white">
-    <div class="w-full flex justify-center mb-10">
-        <a asp-controller="Appointment" asp-action="Create" class="inline-flex items-center gap-x-2 bg-teal-400 hover:bg-teal-300 text-white py-1 px-3 sm rounded">
-            <i class="fa-solid fa-plus"></i>
-            <p>Nueva cita</p>
-            <i class="fa-solid fa-calendar-check"></i>
-        </a>
-    </div>
     <div class="col-span-12">
         <div class="overflow-auto lg:overflow-visible">
             <div class="flex lg:justify-between pb-1">
                 <div>
-                    <div class="flex w-full gap-x-2 items-center justify-around">
-                        <form asp-controller="Appointment" asp-action="Index" class="flex gap-x-2" method="post">
-                            <button class="bg-teal-400 text-white py-1 px-3 sm rounded-full">
-                                Resetear filtro
-                                <i class="fa-solid fa-rotate-right"></i>
-                            </button>
-                        </form>
-                        <form method="post" asp-controller="Appointment" asp-action="Index" class="flex gap-x-2">
-                            <input type="text"
-                                   name="search"
-                                   placeholder="Busqueda"
-                                   class="w-full py-2 border-b-2 border-teal-300 outline-none focus:border-teal-300" />
-                            <button class="bg-teal-400 text-white py-1 px-3 sm rounded-full">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </button>
-                        </form>
-                    </div>
                     <table class="table text-gray-400 border-separate space-y-6 text-sm">
                         <thead class="bg-teal-400 text-white">
                             <tr>
-                                <th class="p-3">Paciente</th>
-                                <th class="p-3 text-left">Doctor</th>
-                                <th class="p-3 text-left">Fecha</th>
-                                <th class="p-3 text-left">Hora</th>
-                                <th class="p-3 text-left">Acciones</th>
+                                <th class="p-3 text-left">Prueba</th>
+                                <th class="p-3 text-left">Paciente</th>
+                                <th class="p-3 text-left">Fecha de creación</th>
+                                <th class="p-3 text-left">Fecha de completación</th>
+                                <th class="p-3 text-left">Fecha de cita</th>
+                                <th class="p-3 text-left">Estado</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.Appointments.Count == 0)
+                            @if (Model.LabTestResults.Count == 0)
                             {
-                                <tr class="bg-teal-50"><td class="text-center p-3" colspan="10">No hay citas registradas</td></tr>
+                                <tr class="bg-teal-50"><td class="text-center p-3" colspan="10">No hay pruebas registradas para esta cita.</td></tr>
                             }
                             else
                             {
-                                @foreach (Appointment appointment in Model.Appointments)
+                                @foreach (LabTestResult labTestResult in Model.LabTestResults)
                                 {
                                     <tr class="bg-teal-50">
-                                        <td class="p-3 font-medium capitalize">@appointment.Patient.Name @appointment.Patient.Lastname</td>
-                                        <td class="p-3">@appointment.Doctor.Name @appointment.Doctor.Lastname</td>
-                                        <td class="p-3">@DateOnly.FromDateTime(appointment.Date)</td>
-                                        <td class="p-3">@appointment.Hour</td>
-                                        <td class="p-3">
-                                            @if(appointment.State is AppointmentStates.PendingAppointment)
-                                            {
-                                                <a asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.Id" class="text-teal-400 hover:text-teal-200 mx-2">
-                                                <i class="fa-solid fa-eye"></i>
-                                                Consultar
-                                                </a>
-                                            }else if(appointment.State is AppointmentStates.PendingResult)
-                                            {
-                                                <a asp-controller="Appointment" asp-action="CheckTests" asp-route-id="@appointment.Id" class="text-teal-400 hover:text-teal-200 mx-2">
-                                                    <i class="fa-solid fa-clock"></i>
-                                                    Consultar resultados
-                                                </a>       
-                                            }else if(appointment.State is AppointmentStates.Completed)
-                                            {
-                                                <a asp-controller="Appointment" asp-action="CheckTests" asp-route-id="@appointment.Id" class="text-teal-400 hover:text-teal-200 mx-2">
-                                                    <i class="fa-solid fa-check"></i>
-                                                    Consultar resultados
-                                                </a>
-                                            }
-
-                                            <button onclick="openModal('@appointment.Id')" class="text-red-400 hover:text-gray-100 ml-2">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </td>
+                                        <td class="p-3 font-medium capitalize">@labTestResult.LabTest.Name</td>
+                                        <td class="p-3 font-medium capitalize">@labTestResult.Patient.Name @labTestResult.Patient.Lastname</td>
+                                        <td class="p-3">@DateOnly.FromDateTime(labTestResult.CreatedAt)</td>
+                                        @if (labTestResult.IsCompleted) {
+                                            <td class="p-3">@DateOnly.FromDateTime((DateTime)labTestResult.CompletedAt)</td>
+                                        }
+                                        else{
+                                            <td class="text-white text-center"><span class="p-1 rounded bg-red-500">Pendiente</span></td>
+                                        }
+                                        <td class="p-3 font-medium capitalize">@DateOnly.FromDateTime(labTestResult.Appointment.Date)</td>
+                                        @if (labTestResult.IsCompleted)
+                                        {
+                                            <td class="text-white text-center"><span class="p-1 rounded bg-teal-400">Completada</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-white text-center p-3"><span class="p-1 rounded bg-red-500">Pendiente</span></td>
+                                        }
                                     </tr>
                                 }
                             }
@@ -188,13 +155,23 @@
                 {
                     <li>
                         <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
-                           asp-controller="Appointment" asp-action="Index" asp-route-page="@i">
+                           asp-controller="Appointment" asp-action="CheckTests" asp-route-page="@i" asp-route-id="@Model.AppointmentId">
                             @i
                         </a>
                     </li>
                 }
             }
         </ul>
+    </nav>
+    <nav class="flex gap-x-2 justify-center mt-10">
+        <a asp-controller="Appointment" asp-action="Index" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="font-semibold">Volver atrás</span>
+        </a>
+        <a asp-controller="Appointment" asp-action="CompleteAppointment" asp-route-id="@Model.AppointmentId" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-teal-300 rounded-md hover:bg-teal-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+            <span class="font-semibold">Completar cita</span>
+            <i class="fa-solid fa-floppy-disk"></i>
+        </a>
     </nav>
 
     <!-- stylesheet -->
@@ -267,3 +244,4 @@
         }
     }
 </script>
+

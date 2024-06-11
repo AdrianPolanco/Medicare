@@ -6,6 +6,7 @@ using Medicare.Domain.Entities;
 using Medicare.Presentation.Filters;
 using Medicare.Presentation.Helpers;
 using Medicare.Presentation.Models.Appointments;
+using Medicare.Presentation.Models.LabTestsResults;
 using Medicare.Presentation.Models.Patients;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
@@ -21,17 +22,20 @@ namespace Medicare.Presentation.Controllers
         private readonly IAssignLabTestsToAppointmentUseCase _assignLabTestsToAppointmentUseCase;
         private readonly ISessionService _sessionService;
         private readonly IAppointmentService _appointmentService;
+        private readonly ILabTestResultService _labTestResultService;
 
         public AppointmentController(
             ICreateAppointmentUseCase createAppointmentUseCase, 
             ISessionService sessionService, 
             IAppointmentService appointmentService,
-            IAssignLabTestsToAppointmentUseCase assignLabTestsToAppointmentUseCase)
+            IAssignLabTestsToAppointmentUseCase assignLabTestsToAppointmentUseCase,
+            ILabTestResultService labTestResultService)
         {
             _createAppointmentUseCase = createAppointmentUseCase;
             _sessionService = sessionService;
             _appointmentService = appointmentService;
             _assignLabTestsToAppointmentUseCase = assignLabTestsToAppointmentUseCase;
+            _labTestResultService = labTestResultService;
         }
         public async Task<IActionResult> Index(int? page, string search, CancellationToken cancellationToken)
         {
@@ -90,6 +94,33 @@ namespace Medicare.Presentation.Controllers
             await _assignLabTestsToAppointmentUseCase.ExecuteAsync(appointmentDetailsViewModel.Appointment, selectedLabTests, cancellationToken);
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> CheckTests(Guid id, int? page, CancellationToken cancellationToken)
+        {
+            page = page ?? 1;
+            UserSessionInfo userSessionInfo = _sessionService.GetSession();
+            ICollection<LabTestResult> labTestResultsCollection = await _labTestResultService.GetByPagesAsync((int)page, cancellationToken, x => x.AppointmentId == id && x.OfficeId == userSessionInfo.OfficeId);
+            List<LabTestResult> labTestResults = labTestResultsCollection.ToList();
+            int pages = await _labTestResultService.GetRowsCountAsync(cancellationToken);
+            LabTestsMenuViewModel labTestsMenuViewModel = new LabTestsMenuViewModel
+            {
+                AppointmentId = id,
+                LabTestResults = labTestResults,
+                Pages = pages,
+                CurrentPage = (int)page
+            };
+
+            return View(labTestsMenuViewModel);
+        }
+
+        public async Task<IActionResult> CompleteAppointment(Guid id, CancellationToken cancellationToken)
+        {
+            Appointment appointment = await _appointmentService.GetByIdAsync(id, cancellationToken);
+            appointment.State = AppointmentStates.Completed;
+            await _appointmentService.UpdateAsync(appointment, cancellationToken);
+            return RedirectToAction("Index");
+           // return RedirectToAction("CheckTests", new { id = labTestResult.AppointmentId });
         }
     }
 }
