@@ -1,0 +1,70 @@
+﻿@using Medicare.Application.Services.Interfaces
+@using Medicare.Domain.Entities
+@using Medicare.Presentation.Models.Appointments
+@using Medicare.Presentation.Models.LabTestsResults
+@using Medicare.Presentation.Models.Users
+@model LabTestResultViewModel;
+@inject ISessionService _sessionService;
+@inject IDoctorService _doctorService;
+@inject ILabTestResultService _labTestService;
+@{
+    ViewData["Title"] = "Publicar resultados - Medicare";
+    Layout = "~/Views/Shared/AuthenticatedPartialView.cshtml";
+    User currentUser = await _sessionService.GetCurrentUser();
+    LabTestResult labTestResult = await _labTestService.GetByIdAsync(Model.Id, new CancellationToken());
+    Doctor doctor = await _doctorService.GetByIdAsync(labTestResult.Appointment.DoctorId, new CancellationToken());
+}
+
+<section class="bg-white">
+    <div class="flex justify-center">
+        <div class="flex items-center w-full max-w-3xl p-8 mx-auto lg:px-12 lg:w-3/5">
+
+
+            <form asp-action="PublishResults" method="post" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <div>
+                    <label class="block mb-2 text-sm text-gray-600">Paciente</label>
+                    <span class="block mb-2 text-sm text-teal-400">@labTestResult.Patient.Name @labTestResult.Patient.Lastname</span>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm text-gray-600">Recetado por: </label>
+                    <span class="block mb-2 text-sm text-teal-400">@doctor.Name @doctor.Lastname</span>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm text-gray-600">Fecha de creación</label>
+                    <label class="block mb-2 text-sm text-teal-400">@DateOnly.FromDateTime(labTestResult.CreatedAt)</label>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm text-gray-600">Prueba</label>
+                    <label class="block mb-2 text-sm text-teal-400">@labTestResult.LabTest.Name</label>
+                </div>
+                <div class="flex flex-col gap-x-2 justify-center items-start">
+                    <label class="block mb-2 text-sm text-gray-600">Nombre del consultorio</label>
+                    <input type="hidden" value="currentUser.OfficeId" name="currentOffice" />
+                    <div class="w-1/2 py-1 px-2 bg-teal-300 rounded-md">
+                        <span class="text-white font-semibold">@labTestResult.Office.Name</span>
+                    </div>
+                </div>
+                <div>
+                    <label asp-for="Result" class="block mb-2 text-sm text-gray-600">Resultado</label>
+                    <textarea asp-for="Result" type="text" rows="4" placeholder="Introduce el resultado de la prueba medica" class="block w-full px-5 py-3 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40"></textarea>
+                    <span asp-validation-for="Result" class="text-red-500"></span>
+                </div>
+
+                <a asp-controller="LabTestResult" asp-action="Index" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span class="font-semibold">Volver atrás</span>
+                </a>
+                <button type="submit" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-teal-300 rounded-md hover:bg-teal-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                    <span class="font-semibold">Publicar resultados</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    </div>
+</section>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

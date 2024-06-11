@@ -104,6 +104,10 @@
                                 <i class="fa-solid fa-rotate-right"></i>
                             </button>
                         </form>
+                        <a asp-controller="Appointment" asp-action="Index" asp-route-showRemainingOnly="true" class="bg-teal-400 text-white py-1 px-3 sm rounded-full">
+                            <i class="fa-solid fa-clock"></i>
+                            Solo citas pendientes
+                        </a>
                         <form method="post" asp-controller="Appointment" asp-action="Index" class="flex gap-x-2">
                             <input type="text"
                                    name="search"
@@ -114,7 +118,7 @@
                             </button>
                         </form>
                     </div>
-                    <table class="table text-gray-400 border-separate space-y-6 text-sm">
+                    <table class="table text-gray-400 border-separate space-y-6 text-sm w-full">
                         <thead class="bg-teal-400 text-white">
                             <tr>
                                 <th class="p-3">Paciente</th>
@@ -154,8 +158,8 @@
                                             }else if(appointment.State is AppointmentStates.Completed)
                                             {
                                                 <a asp-controller="Appointment" asp-action="CheckTests" asp-route-id="@appointment.Id" class="text-teal-400 hover:text-teal-200 mx-2">
-                                                    <i class="fa-solid fa-check"></i>
-                                                    Consultar resultados
+                                                    <i class="fa-solid fa-square-poll-vertical"></i>
+                                                    Ver resultados
                                                 </a>
                                             }
 
@@ -223,7 +227,7 @@
             </div>
             <!--Body-->
             <div class="my-5">
-                <p>¿Esta seguro que desea eliminar este paciente?</p>
+                <p>¿Esta seguro que desea eliminar esta cita?</p>
             </div>
             <!--Footer-->
             <div class="flex justify-end pt-2">
@@ -232,7 +236,7 @@
                 </button>
                 <form asp-controller="Appointment" asp-action="Delete">
                     <input type="hidden" id="appointmentIdToDelete" name="appointmentId" />
-                    <button type="submit" class="focus:outline-none px-4 bg-red-500 p-3 ml-3 rounded-lg text-white hover:bg-red-400">Eliminar paciente</button>
+                    <button type="submit" class="focus:outline-none px-4 bg-red-500 p-3 ml-3 rounded-lg text-white hover:bg-red-400">Eliminar cita</button>
                 </form>
             </div>
         </div>

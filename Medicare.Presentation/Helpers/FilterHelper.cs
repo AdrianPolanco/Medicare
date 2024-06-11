@@ -1,4 +1,5 @@
 ﻿using Medicare.Application.Enums;
+using Medicare.Domain;
 using Medicare.Domain.Entities;
 using Medicare.Domain.Entities.Base;
 using System.Linq.Expressions;
@@ -82,6 +83,23 @@ namespace Medicare.Presentation.Helpers
             if (!string.IsNullOrEmpty(searchValue))
             {
                 searchFilter = searchFilter.And(a => a.Patient.Name.Contains(searchValue) || a.Patient.Lastname.Contains(searchValue) || a.Doctor.Name.Contains(searchValue) || a.Doctor.Lastname.Contains(searchValue));
+            }
+
+            return searchFilter;
+        }
+
+        public static Expression<Func<LabTestResult, bool>>? GetLabTestResultFilter(string searchValue, Guid officeId)
+        {
+            Expression<Func<LabTestResult, bool>>? searchFilter = ltr => true;
+            searchFilter = searchFilter.And(ltr => ltr.OfficeId == officeId);
+            // Filtrar por búsqueda
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                searchFilter = searchFilter.And(ltr => ltr.Patient.IdentityCard.Contains(searchValue)).And(ltr => !ltr.IsCompleted).And(ltr => ltr.Appointment.State != AppointmentStates.Completed);
+            }
+            else
+            {
+                searchFilter = searchFilter.And(ltr => !ltr.IsCompleted).And(ltr => ltr.Appointment.State != AppointmentStates.Completed);
             }
 
             return searchFilter;

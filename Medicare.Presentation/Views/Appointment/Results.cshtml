@@ -1,0 +1,58 @@
+﻿@using Medicare.Application.Services.Interfaces
+@using Medicare.Domain.Entities
+@using Medicare.Presentation.Models.Appointments
+@using Medicare.Presentation.Models.LabTestsResults
+@using Medicare.Presentation.Models.Users
+@model LabTestResult;
+@inject ISessionService _sessionService;
+@inject IDoctorService _doctorService;
+@inject ILabTestResultService _labTestService;
+@{
+    ViewData["Title"] = "Ver Resultados - Medicare";
+    Layout = "~/Views/Shared/AuthenticatedPartialView.cshtml";
+    User currentUser = await _sessionService.GetCurrentUser();
+    Doctor doctor = await _doctorService.GetByIdAsync(Model.Appointment.DoctorId, new CancellationToken());
+}
+
+<section class="bg-white">
+    <div class="flex justify-center">
+        <div class="flex items-center w-full max-w-3xl p-8 mx-auto lg:px-12 lg:w-3/5">
+            <article class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
+                @Html.AntiForgeryToken()
+                <div>
+                    <label class="block mb-2 text-sm text-gray-600">Paciente</label>
+                    <span class="block mb-2 text-sm text-teal-400">@Model.Patient.Name @Model.Patient.Lastname</span>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm text-gray-600">Recetado por: </label>
+                    <span class="block mb-2 text-sm text-teal-400">@doctor.Name @doctor.Lastname</span>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm text-gray-600">Fecha de creación</label>
+                    <label class="block mb-2 text-sm text-teal-400">@DateOnly.FromDateTime(Model.CreatedAt)</label>
+                </div>
+                <div>
+                    <label class="block mb-2 text-sm text-gray-600">Prueba</label>
+                    <label class="block mb-2 text-sm text-teal-400">@Model.LabTest.Name</label>
+                </div>
+                <div class="flex flex-col gap-x-2 justify-center items-start">
+                    <label class="block mb-2 text-sm text-gray-600">Nombre del consultorio</label>
+                    <div class="w-1/2 py-1 px-2 bg-teal-300 rounded-md">
+                        <span class="text-white font-semibold">@Model.Office.Name</span>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <label class="block mb-2 text-sm text-gray-600">Resultados: </label>
+                        <label class="block mb-2 text-sm text-teal-400">@Model.Result</label>
+                    </div>
+                </div>
+
+                <a asp-controller="Appointment" asp-action="CheckTests" asp-route-id="@Model.Appointment.Id" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span class="font-semibold">Volver atrás</span>
+                </a>
+            </article>
+        </div>
+    </div>
+</section>

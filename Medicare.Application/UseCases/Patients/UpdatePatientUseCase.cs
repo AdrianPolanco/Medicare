@@ -3,6 +3,7 @@ using Medicare.Application.Services;
 using Medicare.Application.Services.Interfaces;
 using Medicare.Application.UseCases.Patients.Interfaces;
 using Medicare.Domain.Entities;
+using System.Numerics;
 
 namespace Medicare.Application.UseCases.Patients
 {
@@ -27,10 +28,14 @@ namespace Medicare.Application.UseCases.Patients
                 || string.IsNullOrEmpty(patient.Address)
                 || string.IsNullOrEmpty(patient.IdentityCard)) return false;
 
-            if(fileStream is null || string.IsNullOrEmpty(fileName)) return true;
+            if(fileStream is not null && string.IsNullOrEmpty(fileName) || (fileStream is null && !string.IsNullOrEmpty(fileName))) return true;
+            if (fileStream is null && string.IsNullOrEmpty(fileName)) return true;
 
-            string profileImageRoute = await _fileService.UploadImageAsync(fileStream, fileName, patient.Id, cancellationToken);
-            patient.Photo = profileImageRoute;
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                string profileImageRoute = await _fileService.UploadImageAsync(fileStream, fileName, patient.Id, cancellationToken);
+                patient.Photo = profileImageRoute;
+            }
 
             await _patientService.UpdateAsync(patient, cancellationToken);
 

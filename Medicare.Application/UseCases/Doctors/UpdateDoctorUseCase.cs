@@ -27,16 +27,14 @@ namespace Medicare.Application.UseCases.Doctors
                   || string.IsNullOrEmpty(doctor.Email)
                   || string.IsNullOrEmpty(doctor.IdentityCard)
                   || string.IsNullOrEmpty(doctor.ImageRoute)) return false;
-
-
-            if (fileStream is null || string.IsNullOrEmpty(fileName)) return true;
-
-            string profileImageRoute = await _fileService.UploadImageAsync(fileStream, fileName, doctor.Id, cancellationToken);
-
-            doctor.ImageRoute = profileImageRoute;
-
+       
+            if (fileStream is null && string.IsNullOrEmpty(fileName) && string.IsNullOrEmpty(doctor.ImageRoute)) return true;
+            if (!string.IsNullOrEmpty(fileName)) {
+                string profileImageRoute = await _fileService.UploadImageAsync(fileStream, fileName, doctor.Id, cancellationToken);
+                doctor.ImageRoute = profileImageRoute;
+            }
+            
             await _doctorService.UpdateAsync(doctor, cancellationToken);
-
             return true;
         }
     }

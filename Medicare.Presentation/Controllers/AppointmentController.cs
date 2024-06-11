@@ -37,11 +37,12 @@ namespace Medicare.Presentation.Controllers
             _assignLabTestsToAppointmentUseCase = assignLabTestsToAppointmentUseCase;
             _labTestResultService = labTestResultService;
         }
-        public async Task<IActionResult> Index(int? page, string search, CancellationToken cancellationToken)
+        public async Task<IActionResult> Index(int? page, string search, bool showRemainingOnly, CancellationToken cancellationToken)
         {
             page = page ?? 1;
             UserSessionInfo userSessionInfo = _sessionService.GetSession();
             Expression<Func<Appointment, bool>> searchFilter = FilterHelper.GetAppointmentFilter(search, userSessionInfo.OfficeId);
+            if (showRemainingOnly) searchFilter = searchFilter.And(a => a.State != AppointmentStates.Completed);
             ICollection<Appointment> recoveredAppointments = await _appointmentService.GetByPagesAsync((int)page, cancellationToken, searchFilter);
             List<Appointment> appointments = recoveredAppointments.ToList();
             int pages = await _appointmentService.GetRowsCountAsync(cancellationToken);
@@ -102,12 +103,11 @@ namespace Medicare.Presentation.Controllers
             UserSessionInfo userSessionInfo = _sessionService.GetSession();
             ICollection<LabTestResult> labTestResultsCollection = await _labTestResultService.GetByPagesAsync((int)page, cancellationToken, x => x.AppointmentId == id && x.OfficeId == userSessionInfo.OfficeId);
             List<LabTestResult> labTestResults = labTestResultsCollection.ToList();
-            int pages = await _labTestResultService.GetRowsCountAsync(cancellationToken);
             LabTestsMenuViewModel labTestsMenuViewModel = new LabTestsMenuViewModel
             {
                 AppointmentId = id,
                 LabTestResults = labTestResults,
-                Pages = pages,
+                Pages = (int)Math.Ceiling(labTestResults.Count/10.0),
                 CurrentPage = (int)page
             };
 
@@ -121,6 +121,18 @@ namespace Medicare.Presentation.Controllers
             await _appointmentService.UpdateAsync(appointment, cancellationToken);
             return RedirectToAction("Index");
            // return RedirectToAction("CheckTests", new { id = labTestResult.AppointmentId });
+        }
+
+        public async Task<IActionResult> Delete(Guid appointmentId, CancellationToken cancellationToken)
+        {
+            await _appointmentService.DeleteAsync(appointmentId, cancellationToken);
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Results(Guid id, CancellationToken cancellationToken)
+        {
+            LabTestResult labTestResult = await _labTestResultService.GetByIdAsync(id, cancellationToken);
+            return View(labTestResult);
         }
     }
 }

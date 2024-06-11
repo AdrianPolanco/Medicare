@@ -1,0 +1,184 @@
+﻿@using Medicare.Application.Services.Interfaces
+@using Medicare.Presentation.Models.Doctors
+@using Medicare.Application.Models
+@using Medicare.Domain.Entities
+@using Medicare.Presentation.Models.LabTestsResults
+@using Medicare.Presentation.Models.Patients
+@using Medicare.Presentation.Models.Users
+@model LabTestsMenuViewModel
+@inject ISessionService _sessionService;
+@{
+    ViewData["Title"] = "Medicare - Resultados de pruebas";
+    Layout = "~/Views/Shared/AuthenticatedPartialView.cshtml";
+    User currentUser = await _sessionService.GetCurrentUser();
+    UserSessionInfo userSessionInfo = _sessionService.GetSession();
+}
+
+<style>
+
+    .table {
+        border-spacing: 0 15px;
+    }
+
+    i {
+        font-size: 1rem !important;
+    }
+
+    .table tr {
+        border-radius: 20px;
+    }
+
+    tr td:nth-child(n + 10),
+    tr th:nth-child(n + 10) {
+        border-radius: 0 0.625rem 0.625rem 0;
+    }
+
+    tr td:nth-child(1),
+    tr th:nth-child(1) {
+        border-radius: 0.625rem 0 0 0.625rem;
+    }
+
+    .animated {
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
+
+        .animated.faster {
+            -webkit-animation-duration: 500ms;
+            animation-duration: 500ms;
+        }
+
+    .fadeIn {
+        -webkit-animation-name: fadeIn;
+        animation-name: fadeIn;
+    }
+
+    .fadeOut {
+        -webkit-animation-name: fadeOut;
+        animation-name: fadeOut;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @@keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+</style>
+
+
+<!-- component -->
+<link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+      rel="stylesheet" />
+<div class="flex flex-col items-center min-h-screen bg-white">
+    <div class="col-span-12">
+        <div class="overflow-auto lg:overflow-visible">
+            <div class="flex lg:justify-between pb-1">
+                <div>
+                    <div class="flex w-full gap-x-2 items-center justify-around">
+                        <form asp-controller="LabTestResult" asp-action="Index" class="flex gap-x-2" method="post">
+                            <button class="bg-teal-400 text-white py-1 px-3 sm rounded-full">
+                                Resetear filtro
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                        </form>
+                        <form method="post" asp-controller="LabTestResult" asp-action="Index" class="flex gap-x-2">
+                            <input type="text"
+                                   name="search"
+                                   placeholder="Busqueda"
+                                   class="w-full py-2 border-b-2 border-teal-300 outline-none focus:border-teal-300" />
+                            <button class="bg-teal-400 text-white py-1 px-3 sm rounded-full">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <table class="table text-gray-400 border-separate space-y-6 text-sm">
+                        <thead class="bg-teal-400 text-white">
+                            <tr>
+                                <th class="p-3">Paciente</th>
+                                <th class="p-3 text-left">Cedula</th>
+                                <th class="p-3 text-left">Fecha de Creación</th>
+                                <th class="p-3 text-left">Hora de Creación</th>
+                                <th class="p-3 text-left">Prueba</th>
+                                <th class="p-3 text-left">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.LabTestResults.Count == 0)
+                            {
+                                <tr class="bg-teal-50"><td class="text-center p-3" colspan="10">No hay pruebas pendientes</td></tr>
+                            }
+                            else
+                            {
+                                @foreach (LabTestResult result in Model.LabTestResults)
+                                {
+                                    <tr class="bg-teal-50">
+                                        <td class="p-3 font-medium capitalize">@result.Patient.Name @result.Patient.Lastname</td>
+                                        <td class="p-3">@result.Patient.IdentityCard</td>
+                                        <td class="p-3">@DateOnly.FromDateTime(result.CreatedAt)</td>
+                                        <td class="p-3">@TimeOnly.FromDateTime(result.CreatedAt)</td>
+                                        <td class="p-3">@result.LabTest.Name</td>
+                                        <td class="p-3">
+                                            <a asp-controller="LabTestResult" asp-action="Edit" asp-route-id="@result.Id" class="text-teal-400 hover:text-gray-100 mx-2">
+                                                <i class="fa-solid fa-square-poll-vertical"></i>
+                                                Reportar resultados
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav>
+        <ul class="flex">
+            @for (int i = 1; i <= Model.Pages; i++)
+            {
+                if (i == Model.CurrentPage)
+                {
+                    <li>
+                        <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-tr from-teal-600 to-teal-300 p-0 text-sm text-white shadow-md shadow-teal-400/20 transition duration-150 ease-in-out">
+                            @i
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a class="mx-1 flex h-9 w-9 items-center justify-center rounded-full border border-blue-gray-100 bg-transparent p-0 text-sm text-blue-gray-500 transition duration-150 ease-in-out hover:bg-light-300"
+                           asp-controller="LabTestResult" asp-action="Index" asp-route-page="@i">
+                            @i
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </nav>
+
+    <!-- stylesheet -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/@@material-tailwind/html@latest/styles/material-tailwind.css" />
+    <!-- Material Icons Link -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet" />
+    <script src="https://unpkg.com/@@material-tailwind/html@latest/scripts/ripple.js"></script>
+</div>
+

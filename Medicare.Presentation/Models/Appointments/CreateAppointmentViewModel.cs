@@ -1,6 +1,4 @@
-﻿using Medicare.Domain.Entities;
-using Medicare.Presentation.Filters.Attributes;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 
 namespace Medicare.Presentation.Models.Appointments

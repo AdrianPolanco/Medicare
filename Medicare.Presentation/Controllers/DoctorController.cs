@@ -122,7 +122,8 @@ namespace Medicare.Presentation.Controllers
                 Phone = doctorViewModel.Phone,
                 IdentityCard = doctorViewModel.IdentityCard,
                 OfficeId = doctorViewModel.OfficeId,
-                ImageRoute = doctorViewModel.ImageRoute
+                ImageRoute = doctorViewModel.ImageRoute,
+
             };
 
             Stream? _fileStream = null;

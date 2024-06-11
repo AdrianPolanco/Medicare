@@ -61,7 +61,7 @@ namespace Medicare.Presentation.Controllers
         public async Task<IActionResult> SaveNewPatient(CreatePatientViewModel patientViewModel, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
-                return View("CreateNewDoctor", patientViewModel);
+                return View("Create", patientViewModel);
 
             Patient patient = new Patient
             {
