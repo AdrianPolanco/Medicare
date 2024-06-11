@@ -16,8 +16,6 @@
 <section class="bg-white">
     <div class="flex justify-center">
         <div class="flex items-center w-full max-w-3xl p-8 mx-auto lg:px-12 lg:w-3/5">
-
-
             <form asp-controller="Appointment" asp-action="CreateLabTests" method="post" class="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
                 @Html.AntiForgeryToken()
                 <div>
@@ -28,13 +26,10 @@
                     <label class="block mb-2 text-sm text-gray-600">Doctor</label>
                     <span class="block mb-2 text-sm text-teal-400">@Model.Appointment.Doctor.Name @Model.Appointment.Doctor.Lastname</span>
                 </div>
-
-
                 <div>
                     <label class="block mb-2 text-sm text-gray-600">Fecha</label>
                     <label class="block mb-2 text-sm text-teal-400">@DateOnly.FromDateTime(Model.Appointment.Date)</label>
                 </div>
-
                 <div>
                     <label class="block mb-2 text-sm text-gray-600">Hora</label>
                     <label class="block mb-2 text-sm text-teal-400">@Model.Appointment.Hour</label>
@@ -49,41 +44,59 @@
                         <span class="text-white font-semibold">@Model.Appointment.Office.Name</span>
                     </div>
                 </div>
-
                 <div class="flex flex-col gap-x-2 justify-center items-start">
-                    <label class="block mb-2 text-sm text-gray-600">Pruebas de laboratorio</label><div class="h-64 overflow-y-auto">
+                    <label class="block mb-2 text-sm text-gray-600">Pruebas de laboratorio</label>
+                    <div class="h-64 overflow-y-auto">
                         <ul class="space-y-4">
-                    @foreach(LabTest labtest in labTestsAvailable)
-                    {                       
-                        <li>
-                           <label class="inline-flex items-center">
-                              <input name="selectedLabTests" type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600" value="@labtest.Id"/>
-                              <span class="ml-2">@labtest.Name</span>
-                           </label>
-                        </li>       
-                    }   
+                            @foreach (LabTest labtest in labTestsAvailable)
+                            {
+                                <li>
+                                    <label class="inline-flex items-center">
+                                        <input name="selectedLabTests" type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600 labtest-checkbox" value="@labtest.Id" />
+                                        <span class="ml-2">@labtest.Name</span>
+                                    </label>
+                                </li>
+                            }
                         </ul>
                         @if (!Model.IsValid)
                         {
                             <span class="text-red-500">Debes seleccionar al menos una prueba de laboratorio</span>
-                        }                       
-                </div>
+                        }
+                    </div>
                 </div>
                 <a asp-controller="Appointment" asp-action="Index" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                     <i class="fa-solid fa-arrow-left"></i>
                     <span class="font-semibold">Volver atrás</span>
                 </a>
-                <button type="submit" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-teal-300 rounded-md hover:bg-teal-200 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50">
+                <button type="submit" id="submitButton" class="flex items-center justify-between w-full px-6 py-3 text-sm tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-400 rounded-md cursor-not-allowed disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-50" disabled>
                     <span class="font-semibold">Registrar cita</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </form>
         </div>
     </div>
-    </div>
 </section>
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxes = document.querySelectorAll('.labtest-checkbox');
+        const submitButton = document.getElementById('submitButton');
+
+        function toggleSubmitButton() {
+            const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+            submitButton.disabled = !anyChecked;
+            submitButton.classList.toggle('bg-teal-300', anyChecked);
+            submitButton.classList.toggle('bg-gray-400', !anyChecked);
+            submitButton.classList.toggle('cursor-not-allowed', !anyChecked);
+        }
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', toggleSubmitButton);
+        });
+
+        // Initial check in case some checkboxes are pre-checked
+        toggleSubmitButton();
+    });
+</script>
 
 

@@ -87,12 +87,6 @@ namespace Medicare.Presentation.Controllers
 
         public async Task<IActionResult> CreateLabTests(AppointmentDetailsViewModel appointmentDetailsViewModel, List<Guid> selectedLabTests, CancellationToken cancellationToken)
         {
-            if(selectedLabTests.Count == 0)
-            {
-                appointmentDetailsViewModel.IsValid = false;
-                return View(appointmentDetailsViewModel);
-            }
-
             await _assignLabTestsToAppointmentUseCase.ExecuteAsync(appointmentDetailsViewModel.Appointment, selectedLabTests, cancellationToken);
 
             return RedirectToAction("Index");

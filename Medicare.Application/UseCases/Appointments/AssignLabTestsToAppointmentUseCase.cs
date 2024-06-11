@@ -4,6 +4,7 @@ using Medicare.Application.Models;
 using Medicare.Application.Services.Interfaces;
 using Medicare.Application.UseCases.Appointments.Interfaces;
 using Medicare.Domain.Entities;
+using Medicare.Domain;
 
 namespace Medicare.Application.UseCases.Appointments
 {
@@ -11,13 +12,16 @@ namespace Medicare.Application.UseCases.Appointments
     {
         private readonly ISessionService _sessionService;
         private readonly ILabTestResultService _labTestResultService;
+        private readonly IAppointmentService _appointmentService;
 
         public AssignLabTestsToAppointmentUseCase(
             ISessionService sessionService,
-            ILabTestResultService labTestResultService)
+            ILabTestResultService labTestResultService,
+            IAppointmentService appointmentService)
         {
             _sessionService = sessionService;
             _labTestResultService = labTestResultService;
+            _appointmentService = appointmentService;
         }
 
         public async Task<bool> ExecuteAsync(Appointment appointment, List<Guid> labTestIds, CancellationToken cancellationToken)
@@ -39,6 +43,10 @@ namespace Medicare.Application.UseCases.Appointments
 
                 await _labTestResultService.AddAsync(labTestResult, cancellationToken);
             }
+
+            Appointment recoveredAppointment = await _appointmentService.GetByIdAsync(appointment.Id, cancellationToken);
+            recoveredAppointment.State = AppointmentStates.PendingResult;
+            await _appointmentService.UpdateAsync(recoveredAppointment, cancellationToken);
             return true;
         }
     }
